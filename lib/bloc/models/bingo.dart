@@ -40,8 +40,4 @@ class BingoGame {
       field: null,
     );
   }
-
-  factory BingoGame.createField({
-    
-  })
 }

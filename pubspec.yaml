@@ -1,5 +1,5 @@
-name: hpi_bingo
-description: A bingo app for lectures at the HPI.
+name: bingo
+description: A bingo app for lectures and classes.
 
 version: 1.0.0+1
 
@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
 
+  cloud_firestore: ^0.9.13
   cupertino_icons: ^0.1.2
   rxdart: ^0.21.0
 
