@@ -2,18 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
 
-/// One bingo tile on the field.
-@immutable
-class BingoTile {
-  final String label;
-  final bool isMarked;
-
-  BingoTile(
-    this.label, {
-    this.isMarked = false,
-  })  : assert(label != null),
-        assert(isMarked != null);
-}
+import 'bingo_tile.dart';
 
 /// A bingo field. Can be created by providing a bunch of phrases, like:
 /// ```dart
@@ -54,13 +43,12 @@ class BingoField {
     assert(labels.length == width * height);
 
     var shuffledLabels = Queue.of(List.from(labels)..shuffle());
-    var field = List.generate(width, (x) {
-      return List.generate(
-        height,
-        (y) => shuffledLabels.removeFirst(),
-        growable: false,
-      );
-    }, growable: false);
+    var field = List.generate(width, (x) => List(height), growable: false);
+    for (var y = 0; y < height; y++) {
+      for (var x = 0; x < width; x++) {
+        field[x][y] = shuffledLabels.removeFirst();
+      }
+    }
 
     return BingoField(field);
   }

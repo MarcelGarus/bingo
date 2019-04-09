@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class NewGameScreen extends StatelessWidget {
+class CreateGameScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
