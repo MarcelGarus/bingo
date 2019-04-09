@@ -20,67 +20,60 @@ import 'bingo_tile.dart';
 /// var tile = field[3][2] // The tile at position (3, 2).
 @immutable
 class BingoField {
-  final List<List<BingoTile>> _field;
-
-  int get width => _field.length;
-  int get height => _field[0].length;
+  final String id;
+  final int width, height;
+  final List<BingoTile> field;
 
   /// Creates a bingo field.
-  BingoField(List<List<BingoTile>> field)
-      : _field = field,
+  BingoField({
+    @required this.id,
+    @required this.width,
+    @required this.height,
+    @required this.field,
+  })  : assert(id != null),
+        assert(width != null),
+        assert(width > 0),
+        assert(height != null),
+        assert(height > 0),
         assert(field != null),
-        assert(Set.from(field.map((column) => column.length)).length == 1,
-            'The different columns have different heights. This is not allowed.'),
-        assert(field.length > 0),
-        assert(field[0].length > 0);
+        assert(field.length == width * height);
 
   /// Creates a new bingo field that contains the given labels.
-  BingoField fromShuffled({
+  factory BingoField.fromShuffled({
+    @required String id,
     @required int width,
     @required int height,
     @required Set<String> labels,
   }) {
-    assert(labels.length == width * height);
-
-    var shuffledLabels = Queue.of(List.from(labels)..shuffle());
-    var field = List.generate(width, (x) => List(height), growable: false);
-    for (var y = 0; y < height; y++) {
-      for (var x = 0; x < width; x++) {
-        field[x][y] = shuffledLabels.removeFirst();
-      }
-    }
-
-    return BingoField(field);
+    return BingoField(
+      id: id,
+      width: width,
+      height: height,
+      field: List.from(labels)..shuffle(),
+    );
   }
 
-  /// Returns a copy of this bingo field, but the tile with the given label
+  /// Returns a copy of this bingo field, but the tile with the given label is
   /// marked.
   BingoField withMarked(String label) {
-    var width = this.width;
-    var height = this.height;
-
     return BingoField(
-      List.generate(width, (x) {
-        return List.generate(height, (y) {
-          var tile = _field[x][y];
-          return BingoTile(
-            tile.label,
-            isMarked: tile.label == label ? true : tile.isMarked,
-          );
-        }, growable: false);
-      }, growable: false),
+      id: id,
+      width: width,
+      height: height,
+      field: field
+          .map((tile) =>
+              tile.label == label ? BingoTile(label, isMarked: true) : tile)
+          .toList(growable: false),
     );
   }
 
   /// Returns a BingoColumn (a helper class) that also overloads the []
   /// operator, allowing for referencing fields at (x,y) using BingoField[x][y].
-  operator [](int x) => BingoColumn((y) => _field[x][y]);
+  operator [](int x) => BingoColumn((y) => field[width * y + x]);
 }
 
 class BingoColumn {
   BingoTile Function(int index) _callback;
-
   BingoColumn(this._callback);
-
   operator [](index) => _callback(index);
 }
