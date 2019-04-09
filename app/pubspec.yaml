@@ -1,0 +1,26 @@
+name: hpi_bingo
+description: A bingo app for lectures at the HPI.
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^0.1.2
+  rxdart: ^0.21.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+
+  fonts:
+    - family: Signature
+      fonts:
+        - asset: "assets/Rubik-Regular.ttf"

@@ -1,0 +1,1 @@
+export 'models/bingo.dart';
