@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'widgets/bingo_field.dart';
-import 'screens/create_game.dart';
-import 'bloc/models.dart';
+import 'screens/main_menu.dart';
+import 'bloc/bloc_provider.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(BlocProvider(child: MyApp()));
 
 class MyApp extends StatelessWidget {
   @override
@@ -32,26 +31,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      body: SafeArea(
-        child: Center(
-          child: BingoFieldView(
-            field: BingoField([
-              [BingoTile('hey'), BingoTile('this'), BingoTile('is')],
-              [BingoTile('some'), BingoTile('really'), BingoTile('cool')],
-              [BingoTile('stuff'), BingoTile('here'), BingoTile('nich')],
-            ]),
-            onTilePressed: print,
-          ),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (ctx) => CreateGameScreen(),
-          ));
-        },
-      ),
+      body: MainMenuScreen(),
     );
   }
 }

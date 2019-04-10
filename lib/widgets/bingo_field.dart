@@ -19,14 +19,12 @@ class BingoFieldView extends StatelessWidget {
   }
 
   Widget _buildGrid() {
-    var width = field.width;
-    var height = field.height;
     return Row(
       mainAxisSize: MainAxisSize.min,
-      children: List.generate(width, (x) {
+      children: List.generate(field.size, (x) {
         return Column(
           mainAxisSize: MainAxisSize.min,
-          children: List.generate(height, (y) => _buildTile(field[x][y])),
+          children: List.generate(field.size, (y) => _buildTile(field[x][y])),
         );
       }),
     );

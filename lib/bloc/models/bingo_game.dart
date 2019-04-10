@@ -7,7 +7,7 @@ import 'votes.dart';
 @immutable
 class BingoGame {
   final String id;
-  final int width, height;
+  final int size;
   final int numPlayers;
   final Set<String> labels;
   final Queue<Vote> voteQueue;
@@ -16,8 +16,7 @@ class BingoGame {
   /// Rich constructor.
   BingoGame({
     @required this.id,
-    @required this.width,
-    @required this.height,
+    @required this.size,
     @required this.numPlayers,
     @required this.labels,
     @required this.voteQueue,
@@ -26,15 +25,13 @@ class BingoGame {
 
   factory BingoGame.newGame({
     @required String id,
-    @required int width,
-    @required int height,
+    @required int size,
     @required int numPlayers,
     @required Set<String> labels,
   }) {
     return BingoGame(
       id: id,
-      width: width,
-      height: height,
+      size: size,
       numPlayers: numPlayers,
       labels: labels,
       voteQueue: Queue<Vote>(),
@@ -44,7 +41,7 @@ class BingoGame {
 
   BingoGame copyWith({
     String id,
-    int width,
+    int size,
     int height,
     int numPlayers,
     Set<String> labels,
@@ -53,8 +50,7 @@ class BingoGame {
   }) {
     return BingoGame(
       id: id ?? this.id,
-      width: width ?? this.width,
-      height: height ?? this.height,
+      size: size ?? this.size,
       numPlayers: numPlayers ?? this.numPlayers,
       labels: labels ?? this.labels,
       voteQueue: voteQueue ?? this.voteQueue,

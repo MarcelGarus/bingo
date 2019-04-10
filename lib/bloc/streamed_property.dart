@@ -29,4 +29,8 @@ class StreamedProperty<T> {
 
   BehaviorSubject _subject;
   ValueObservable<T> get stream => _subject.stream; // TODO: .distinct()
+
+  Future<void> dispose() async {
+    await _subject.close();
+  }
 }

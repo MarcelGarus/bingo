@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:flutter/foundation.dart';
 
 import 'bingo_tile.dart';
@@ -7,8 +5,7 @@ import 'bingo_tile.dart';
 /// A bingo field. Can be created by providing a bunch of phrases, like:
 /// ```dart
 /// var field = BingoField.fromShuffled(
-///   width: 4,
-///   height: 4,
+///   size: 4,
 ///   labels: { 'Something', 'Something else', ... },
 /// );
 /// ```
@@ -21,35 +18,30 @@ import 'bingo_tile.dart';
 @immutable
 class BingoField {
   final String id;
-  final int width, height;
-  final List<BingoTile> field;
+  final int size;
+  final List<BingoTile> tiles;
 
   /// Creates a bingo field.
   BingoField({
     @required this.id,
-    @required this.width,
-    @required this.height,
-    @required this.field,
+    @required this.size,
+    @required this.tiles,
   })  : assert(id != null),
-        assert(width != null),
-        assert(width > 0),
-        assert(height != null),
-        assert(height > 0),
-        assert(field != null),
-        assert(field.length == width * height);
+        assert(size != null),
+        assert(size > 0),
+        assert(tiles != null),
+        assert(tiles.length == size * size);
 
   /// Creates a new bingo field that contains the given labels.
-  factory BingoField.fromShuffled({
+  factory BingoField.fromLabels({
     @required String id,
-    @required int width,
-    @required int height,
+    @required int size,
     @required Set<String> labels,
   }) {
     return BingoField(
       id: id,
-      width: width,
-      height: height,
-      field: List.from(labels)..shuffle(),
+      size: size,
+      tiles: List.from(labels)..shuffle(),
     );
   }
 
@@ -58,9 +50,8 @@ class BingoField {
   BingoField withMarked(String label) {
     return BingoField(
       id: id,
-      width: width,
-      height: height,
-      field: field
+      size: size,
+      tiles: tiles
           .map((tile) =>
               tile.label == label ? BingoTile(label, isMarked: true) : tile)
           .toList(growable: false),
@@ -69,7 +60,7 @@ class BingoField {
 
   /// Returns a BingoColumn (a helper class) that also overloads the []
   /// operator, allowing for referencing fields at (x,y) using BingoField[x][y].
-  operator [](int x) => BingoColumn((y) => field[width * y + x]);
+  operator [](int x) => BingoColumn((y) => tiles[size * y + x]);
 }
 
 class BingoColumn {

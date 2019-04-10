@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/size_selector.dart';
-import '../widgets/word_selector.dart';
+import '../widgets/hovered_input.dart';
 
-class CreateGameScreen extends StatelessWidget {
-  final _sizeController = SizeSelectionController();
-  final _wordController = WordSelectionController();
-
+class JoinGameScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
@@ -15,13 +11,13 @@ class CreateGameScreen extends StatelessWidget {
             EdgeInsets.symmetric(horizontal: 8, vertical: 16),
         children: <Widget>[
           Center(
-            child: Text('Create a new game', style: TextStyle(fontSize: 32)),
+            child: Text('Join a game', style: TextStyle(fontSize: 32)),
           ),
           SizedBox(height: 16),
-          SizeSelector(controller: _sizeController),
-          SizedBox(height: 16),
-          WordSelector(controller: _wordController),
-          SizedBox(height: 16),
+          HoveredInput(
+            hint: 'Enter the code',
+            onDone: (code) {},
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(

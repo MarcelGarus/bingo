@@ -10,11 +10,21 @@ class PlayGameScreen extends StatelessWidget {
       body: SafeArea(
         child: Center(
           child: BingoFieldView(
-            field: BingoField([
-              [BingoTile('hey'), BingoTile('this'), BingoTile('is')],
-              [BingoTile('some'), BingoTile('really'), BingoTile('cool')],
-              [BingoTile('stuff'), BingoTile('here'), BingoTile('nich')],
-            ]),
+            field: BingoField(
+              id: '',
+              size: 3,
+              tiles: [
+                BingoTile('hey'),
+                BingoTile('this'),
+                BingoTile('is'),
+                BingoTile('some'),
+                BingoTile('really'),
+                BingoTile('cool'),
+                BingoTile('stuff'),
+                BingoTile('here'),
+                BingoTile('nich'),
+              ],
+            ),
             onTilePressed: print,
           ),
         ),

@@ -22,6 +22,13 @@ class Bloc {
       .document(_game.value.id)
       .collection('players');
 
+  Future<void> initialize() async {}
+
+  Future<void> dispose() async {
+    await _game.dispose();
+    await _field.dispose();
+  }
+
   // Loads the game.
   Future<BingoGame> _getGame(id) async {
     var snapshot = await _firestoreGames.document(id).get();
@@ -32,8 +39,7 @@ class Bloc {
 
     return BingoGame(
       id: id,
-      width: data['width'] as int,
-      height: data['height'] as int,
+      size: data['size'] as int,
       numPlayers: data['numPlayers'] as int,
       labels: Set.from(data['labels'] as List<String>),
       voteQueue: Queue.from(data['voteQueue'] as List<String>),
@@ -51,8 +57,7 @@ class Bloc {
 
     return BingoField(
       id: id,
-      width: _game.value.width,
-      height: _game.value.height,
+      size: _game.value.size,
       tiles: (data['tiles'] as List<String>).map((label) {
         return BingoTile(label, isMarked: _game.value.marked.contains(label));
       }).toList(),
@@ -60,10 +65,9 @@ class Bloc {
   }
 
   // Creates a new game.
-  Future<void> createGame(int width, int height, Set<String> labels) async {
+  Future<void> createGame(int size, Set<String> labels) async {
     var doc = await _firestoreGames.add({
-      'width': width,
-      'height': height,
+      'size': size,
       'numPlayers': 0,
       'labels': List.from(labels),
       'voteQueue': [],
@@ -71,8 +75,7 @@ class Bloc {
     });
     _game.value = BingoGame.newGame(
       id: doc.documentID,
-      width: width,
-      height: height,
+      size: size,
       numPlayers: 0,
       labels: labels,
     );
@@ -94,8 +97,7 @@ class Bloc {
     });
     _field.value = BingoField.fromLabels(
       id: doc.documentID,
-      width: game.width,
-      height: game.height,
+      size: game.size,
       labels: labels,
     );
   }
