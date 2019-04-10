@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 
+import '../bloc/bloc.dart';
+import '../screens/select_words.dart';
 import '../widgets/size_selector.dart';
-import '../widgets/word_selector.dart';
+import '../widgets/words_input.dart';
 
-class CreateGameScreen extends StatelessWidget {
-  final _sizeController = SizeSelectionController();
-  final _wordController = WordSelectionController();
+class CreateGameScreen extends StatefulWidget {
+  @override
+  _CreateGameScreenState createState() => _CreateGameScreenState();
+}
+
+class _CreateGameScreenState extends State<CreateGameScreen> {
+  int size = 2;
+  List<String> words = [];
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,18 +24,32 @@ class CreateGameScreen extends StatelessWidget {
           Center(
             child: Text('Create a new game', style: TextStyle(fontSize: 32)),
           ),
-          SizedBox(height: 16),
-          SizeSelector(controller: _sizeController),
-          SizedBox(height: 16),
-          WordSelector(controller: _wordController),
-          SizedBox(height: 16),
+          SizedBox(height: 32),
+          SizeSelector(
+            sizes: [2, 3, 4, 5],
+            selectedSize: size,
+            onSizeSelected: (s) => setState(() => size = s),
+          ),
+          SizedBox(height: 32),
+          WordsInput(
+            words: words,
+            onWordsChanged: (w) => setState(() => words = w),
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
         icon: Icon(Icons.play_arrow),
         label: Text('Start the game'),
         backgroundColor: Colors.white,
-        onPressed: () {},
+        onPressed: () {
+          setState(() async {
+            await Bloc.of(context)
+                .createGame(size: size, labels: Set.from(words));
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (_) => SelectWordsScreen(),
+            ));
+          });
+        },
       ),
     );
   }

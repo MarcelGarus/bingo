@@ -16,7 +16,7 @@ class HoveredInput extends StatelessWidget {
       borderRadius: BorderRadius.circular(16),
       elevation: 2,
       child: Padding(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
         child: Row(
           children: <Widget>[
             Expanded(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../bloc/bloc.dart';
+import '../screens/select_words.dart';
 import '../widgets/hovered_input.dart';
 
 class JoinGameScreen extends StatelessWidget {
@@ -16,15 +18,14 @@ class JoinGameScreen extends StatelessWidget {
           SizedBox(height: 16),
           HoveredInput(
             hint: 'Enter the code',
-            onDone: (code) {},
+            onDone: (code) async {
+              await Bloc.of(context).joinGame(code);
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (_) => SelectWordsScreen(),
+              ));
+            },
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        icon: Icon(Icons.play_arrow),
-        label: Text('Start the game'),
-        backgroundColor: Colors.white,
-        onPressed: () {},
       ),
     );
   }

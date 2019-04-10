@@ -1,35 +1,28 @@
 import 'package:flutter/material.dart';
 
-const kMinimumSize = 2;
+class SizeSelector extends StatelessWidget {
+  SizeSelector({
+    @required this.sizes,
+    @required this.selectedSize,
+    @required this.onSizeSelected,
+  })  : assert(sizes != null),
+        assert(selectedSize != null),
+        assert(onSizeSelected != null);
 
-class SizeSelectionController extends ValueNotifier<int> {
-  SizeSelectionController() : super(kMinimumSize);
+  final List<int> sizes;
+  final int selectedSize;
+  final void Function(int size) onSizeSelected;
 
-  int get size => value;
-  set size(int s) => value = s;
-}
-
-class SizeSelector extends StatefulWidget {
-  SizeSelector({@required this.controller}) : assert(controller != null);
-
-  final SizeSelectionController controller;
-
-  @override
-  _SizeSelectorState createState() => _SizeSelectorState();
-}
-
-class _SizeSelectorState extends State<SizeSelector> {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(4, (i) {
-        var size = kMinimumSize + i;
+      children: sizes.map((size) {
         return SizeButton(
           size: size,
-          isEnabled: size == widget.controller.size,
-          onPressed: () => setState(() => widget.controller.size = size),
+          isEnabled: size == selectedSize,
+          onPressed: () => onSizeSelected(size),
         );
-      }),
+      }).toList(),
     );
   }
 }
@@ -46,22 +39,29 @@ class SizeButton extends StatelessWidget {
   final VoidCallback onPressed;
 
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onPressed,
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 8),
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: isEnabled ? Colors.transparent : Colors.black,
-            width: isEnabled ? 0 : 2,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Material(
+        elevation: isEnabled ? 2 : 0,
+        borderRadius: BorderRadius.circular(16),
+        color: isEnabled ? Colors.white : Theme.of(context).primaryColor,
+        child: InkWell(
+          onTap: onPressed,
+          child: AnimatedContainer(
+            duration: Duration(milliseconds: 200),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: isEnabled ? Colors.transparent : Colors.black,
+                width: isEnabled ? 0 : 2,
+              ),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            width: 48,
+            height: 48,
+            alignment: Alignment.center,
+            child: Text('${size}x$size'),
           ),
-          borderRadius: BorderRadius.circular(16),
-          color: isEnabled ? Colors.white : Colors.white12,
         ),
-        width: 48,
-        height: 48,
-        alignment: Alignment.center,
-        child: Text('${size}x$size'),
       ),
     );
   }

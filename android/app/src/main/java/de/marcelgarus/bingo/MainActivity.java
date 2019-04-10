@@ -1,4 +1,4 @@
-package com.example.app;
+package de.marcelgarus.bingo;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

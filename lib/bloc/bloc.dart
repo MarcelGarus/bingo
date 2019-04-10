@@ -1,18 +1,25 @@
 import 'dart:collection';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/widgets.dart';
 import 'package:rxdart/rxdart.dart';
 
+import 'bloc_provider.dart';
 import 'models.dart';
 import 'streamed_property.dart';
 
+export 'models.dart';
+
 class Bloc {
-  StreamedProperty<BingoGame> _game;
+  final _game = StreamedProperty<BingoGame>();
   BingoGame get game => _game.value;
   ValueObservable<BingoGame> get gameStream => _game.stream;
-  StreamedProperty<BingoField> _field;
+
+  final _field = StreamedProperty<BingoField>();
   BingoField get field => _field.value;
   ValueObservable<BingoField> get fieldStream => _field.stream;
+
+  final votedWords = <String>{};
 
   // Firestore helpers.
   CollectionReference get _firestoreGames =>
@@ -22,7 +29,12 @@ class Bloc {
       .document(_game.value.id)
       .collection('players');
 
-  Future<void> initialize() async {}
+  /// This method allows subtree widgets to access this bloc.
+  static Bloc of(BuildContext context) {
+    assert(context != null);
+    final BlocProvider holder = context.ancestorWidgetOfExactType(BlocProvider);
+    return holder?.bloc;
+  }
 
   Future<void> dispose() async {
     await _game.dispose();
@@ -30,7 +42,7 @@ class Bloc {
   }
 
   // Loads the game.
-  Future<BingoGame> _getGame(id) async {
+  Future<BingoGame> _getGame(String id) async {
     var snapshot = await _firestoreGames.document(id).get();
     if (!snapshot.exists) {
       throw StateError("Game doesn't exist."); //GameDoesNotExistError();
@@ -41,9 +53,9 @@ class Bloc {
       id: id,
       size: data['size'] as int,
       numPlayers: data['numPlayers'] as int,
-      labels: Set.from(data['labels'] as List<String>),
-      voteQueue: Queue.from(data['voteQueue'] as List<String>),
-      marked: Set.from(data['marked'] as List<String>),
+      labels: Set.from((data['labels'] as List)),
+      voteQueue: Queue.from(data['voteQueue'] as List),
+      marked: Set.from(data['marked'] as List),
     );
   }
 
@@ -65,7 +77,8 @@ class Bloc {
   }
 
   // Creates a new game.
-  Future<void> createGame(int size, Set<String> labels) async {
+  Future<void> createGame(
+      {@required int size, @required Set<String> labels}) async {
     var doc = await _firestoreGames.add({
       'size': size,
       'numPlayers': 0,
@@ -86,7 +99,10 @@ class Bloc {
     var game = await _getGame(id);
     game = game.copyWith(numPlayers: game.numPlayers + 1);
 
-    await _firestoreGames.document(id).setData({'numPlayers': game.numPlayers});
+    await _firestoreGames.document(id).setData(
+      {'numPlayers': game.numPlayers},
+      merge: true,
+    );
     _game.value = game;
   }
 

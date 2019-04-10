@@ -24,8 +24,8 @@ class BingoTileView extends StatelessWidget {
           onTap: onPressed,
           borderRadius: BorderRadius.circular(16),
           child: Container(
-            width: 92,
-            height: 92,
+            width: 128,
+            height: 128,
             alignment: Alignment.center,
             child: Text(
               tile.label,
