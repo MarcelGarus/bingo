@@ -53,9 +53,9 @@ class _SelectWordsScreenState extends State<SelectWordsScreen> {
       ));
     } else {
       // Otherwise, we need to reduce the number of words. Do that by letting
-      // the player choose between [word1] and [word2]. If there are so many words
-      // that the user voted on all of them but still got too many words, let him
-      // re-vote on some of them.
+      // the player choose between [word1] and [word2]. If there are so many
+      // words that the user voted on all of them but still got too many words,
+      // let him re-vote on some of them.
       setState(() {
         while (otherWords.length < 2) {
           var wordToRevote = _chooseRandomWord(acceptedWords);
@@ -83,6 +83,12 @@ class _SelectWordsScreenState extends State<SelectWordsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
+      appBar: AppBar(
+        elevation: 0,
+        actions: <Widget>[
+          IconButton(icon: Icon(Icons.code), onPressed: () {}),
+        ],
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
