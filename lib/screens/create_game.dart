@@ -41,10 +41,10 @@ class _CreateGameScreenState extends State<CreateGameScreen> {
         icon: Icon(Icons.play_arrow),
         label: Text('Start the game'),
         backgroundColor: Colors.white,
-        onPressed: () {
-          setState(() async {
-            await Bloc.of(context)
-                .createGame(size: size, labels: Set.from(words));
+        onPressed: () async {
+          await Bloc.of(context)
+              .createGame(size: size, labels: Set.from(words));
+          setState(() {
             Navigator.of(context).pushReplacement(MaterialPageRoute(
               builder: (_) => SelectWordsScreen(),
             ));

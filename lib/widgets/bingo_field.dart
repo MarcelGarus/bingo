@@ -24,13 +24,18 @@ class BingoFieldView extends StatelessWidget {
       children: List.generate(field.size, (x) {
         return Column(
           mainAxisSize: MainAxisSize.min,
-          children: List.generate(field.size, (y) => _buildTile(field[x][y])),
+          children: List.generate(
+            field.size,
+            (y) {
+              var tile = field[x][y];
+              return BingoTileView(
+                tile: tile,
+                onPressed: () => onTilePressed(tile),
+              );
+            },
+          ),
         );
       }),
     );
-  }
-
-  Widget _buildTile(BingoTile tile) {
-    return BingoTileView(tile: tile, onPressed: () => onTilePressed(tile));
   }
 }

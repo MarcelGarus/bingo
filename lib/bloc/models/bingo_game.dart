@@ -10,7 +10,7 @@ class BingoGame {
   final int size;
   final int numPlayers;
   final Set<String> labels;
-  final Queue<Vote> voteQueue;
+  final Set<Vote> votes;
   final Set<String> marked;
 
   /// Rich constructor.
@@ -19,22 +19,21 @@ class BingoGame {
     @required this.size,
     @required this.numPlayers,
     @required this.labels,
-    @required this.voteQueue,
+    @required this.votes,
     @required this.marked,
   });
 
   factory BingoGame.newGame({
-    @required String id,
     @required int size,
     @required int numPlayers,
     @required Set<String> labels,
   }) {
     return BingoGame(
-      id: id,
+      id: null,
       size: size,
       numPlayers: numPlayers,
       labels: labels,
-      voteQueue: Queue<Vote>(),
+      votes: <Vote>{},
       marked: <String>{},
     );
   }
@@ -45,7 +44,7 @@ class BingoGame {
     int height,
     int numPlayers,
     Set<String> labels,
-    Queue<Vote> voteQueue,
+    Set<Vote> votes,
     Set<String> marked,
   }) {
     return BingoGame(
@@ -53,13 +52,13 @@ class BingoGame {
       size: size ?? this.size,
       numPlayers: numPlayers ?? this.numPlayers,
       labels: labels ?? this.labels,
-      voteQueue: voteQueue ?? this.voteQueue,
+      votes: votes ?? this.votes,
       marked: marked ?? this.marked,
     );
   }
 
   Vote getVote(String label) {
-    return voteQueue.firstWhere((vote) => vote.label == label);
+    return votes.firstWhere((vote) => vote.label == label);
   }
 
   BingoGame copyWithUpdatedVote({
@@ -67,9 +66,16 @@ class BingoGame {
     @required Vote updated,
   }) {
     return copyWith(
-      voteQueue: Queue.from(
-        voteQueue.map((vote) => vote == original ? updated : vote),
-      ),
+      votes: votes.map((vote) => vote == original ? updated : vote).toSet()
+        ..removeWhere((v) => v == null),
     );
+  }
+
+  @override
+  String toString() {
+    return '{id=$id, size=$size, numPlayers=$numPlayers, '
+        'labels=[${labels.join(', ')}], '
+        'voteQueue=[${votes.join(', ')}], '
+        'marked=[${marked.join(', ')}]}';
   }
 }

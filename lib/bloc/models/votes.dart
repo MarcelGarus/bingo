@@ -33,4 +33,16 @@ class Vote {
   bool isApproved(int numTotalPlayers) => votesFor / numTotalPlayers >= 0.5;
 
   bool isRejected(int numTotalPlayers) => votesAgainst / numTotalPlayers > 0.5;
+
+  bool operator ==(other) {
+    return other is Vote && other.label == label;
+  }
+
+  @override
+  int get hashCode => label.hashCode;
+
+  @override
+  String toString() {
+    return '{$label, $votesFor vs. $votesAgainst}';
+  }
 }

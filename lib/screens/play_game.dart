@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../bloc/models.dart';
+import '../bloc/bloc.dart';
 import '../widgets/bingo_field.dart';
 
 class PlayGameScreen extends StatelessWidget {
@@ -9,23 +9,25 @@ class PlayGameScreen extends StatelessWidget {
       backgroundColor: Theme.of(context).primaryColor,
       body: SafeArea(
         child: Center(
-          child: BingoFieldView(
-            field: BingoField(
-              id: '',
-              size: 3,
-              tiles: [
-                BingoTile('hey'),
-                BingoTile('this'),
-                BingoTile('is'),
-                BingoTile('some'),
-                BingoTile('really'),
-                BingoTile('cool'),
-                BingoTile('stuff'),
-                BingoTile('here'),
-                BingoTile('nich'),
-              ],
-            ),
-            onTilePressed: print,
+          child: StreamBuilder<BingoField>(
+            stream: Bloc.of(context).fieldStream,
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return CircularProgressIndicator();
+              }
+
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  BingoFieldView(
+                    field: snapshot.data,
+                    onTilePressed: (tile) async {
+                      await Bloc.of(context).proposeMarking(tile.label);
+                    },
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ),

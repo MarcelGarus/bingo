@@ -1,14 +1,20 @@
 import 'package:flutter/foundation.dart';
 
+enum BingoTileState { unmarked, voting, marked }
+
 /// One bingo tile on the field.
 @immutable
 class BingoTile {
   final String label;
-  final bool isMarked;
+  final BingoTileState state;
 
   BingoTile(
     this.label, {
-    this.isMarked = false,
+    this.state = BingoTileState.unmarked,
   })  : assert(label != null),
-        assert(isMarked != null);
+        assert(state != null);
+
+  String toString() {
+    return '{$label: $state}';
+  }
 }

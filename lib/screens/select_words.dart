@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -17,15 +18,22 @@ class _SelectWordsScreenState extends State<SelectWordsScreen> {
   final otherWords = <String>{};
 
   String word1, word2;
+  StreamSubscription<BingoGame> streamSubscription;
 
   int get numRequiredWords => pow(Bloc.of(context).game.size, 2);
 
   void initState() {
     super.initState();
-    Bloc.of(context).gameStream.listen((game) => _update());
+    streamSubscription =
+        Bloc.of(context).gameStream.listen((game) => _update());
   }
 
-  void _update() {
+  void dispose() {
+    streamSubscription.cancel();
+    super.dispose();
+  }
+
+  void _update() async {
     var allWords = Bloc.of(context).game.labels;
     acceptedWords.removeWhere((word) => !allWords.contains(word));
     otherWords
@@ -39,17 +47,26 @@ class _SelectWordsScreenState extends State<SelectWordsScreen> {
 
     assert(numAvailableWords >= numRequiredWords);
     if (numAvailableWords == numRequiredWords) {
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
+      await Bloc.of(context).selectLabels(availableWords);
+      await Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (_) => PlayGameScreen(),
       ));
-    }
+    } else {
+      // Otherwise, we need to reduce the number of words. Do that by letting
+      // the player choose between [word1] and [word2]. If there are so many words
+      // that the user voted on all of them but still got too many words, let him
+      // re-vote on some of them.
+      setState(() {
+        while (otherWords.length < 2) {
+          var wordToRevote = _chooseRandomWord(acceptedWords);
+          acceptedWords.remove(wordToRevote);
+          otherWords.add(wordToRevote);
+        }
 
-    // Otherwise, we need to reduce the number of words. Do that by letting
-    // the player choose between [word1] and [word2].
-    setState(() {
-      word1 = _chooseRandomWord(otherWords);
-      word2 = _chooseRandomWord(otherWords.where((w) => w != word1));
-    });
+        word1 = _chooseRandomWord(otherWords);
+        word2 = _chooseRandomWord(otherWords.where((w) => w != word1));
+      });
+    }
   }
 
   void _selectWord(String word) {
@@ -72,7 +89,7 @@ class _SelectWordsScreenState extends State<SelectWordsScreen> {
         children: <Widget>[
           Container(),
           BingoTileView(
-            tile: BingoTile(word1),
+            tile: BingoTile(word1 ?? ''),
             onPressed: () => _selectWord(word1),
           ),
           Padding(
@@ -80,7 +97,7 @@ class _SelectWordsScreenState extends State<SelectWordsScreen> {
             child: Text('vs', style: TextStyle(fontSize: 16)),
           ),
           BingoTileView(
-            tile: BingoTile(word2),
+            tile: BingoTile(word2 ?? ''),
             onPressed: () => _selectWord(word2),
           ),
         ],

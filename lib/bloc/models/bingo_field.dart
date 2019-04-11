@@ -17,43 +17,37 @@ import 'bingo_tile.dart';
 /// var tile = field[3][2] // The tile at position (3, 2).
 @immutable
 class BingoField {
-  final String id;
   final int size;
   final List<BingoTile> tiles;
 
   /// Creates a bingo field.
   BingoField({
-    @required this.id,
     @required this.size,
     @required this.tiles,
-  })  : assert(id != null),
-        assert(size != null),
+  })  : assert(size != null),
         assert(size > 0),
         assert(tiles != null),
         assert(tiles.length == size * size);
 
   /// Creates a new bingo field that contains the given labels.
   factory BingoField.fromLabels({
-    @required String id,
     @required int size,
     @required Set<String> labels,
   }) {
     return BingoField(
-      id: id,
       size: size,
-      tiles: List.from(labels)..shuffle(),
+      tiles: List<BingoTile>.from(labels.map((label) => BingoTile(label)))
+        ..shuffle(),
     );
   }
 
   /// Returns a copy of this bingo field, but the tile with the given label is
   /// marked.
-  BingoField withMarked(String label) {
+  BingoField withTileStates(BingoTileState Function(String label) getState) {
     return BingoField(
-      id: id,
       size: size,
       tiles: tiles
-          .map((tile) =>
-              tile.label == label ? BingoTile(label, isMarked: true) : tile)
+          .map((tile) => BingoTile(tile.label, state: getState(tile.label)))
           .toList(growable: false),
     );
   }
@@ -61,6 +55,11 @@ class BingoField {
   /// Returns a BingoColumn (a helper class) that also overloads the []
   /// operator, allowing for referencing fields at (x,y) using BingoField[x][y].
   operator [](int x) => BingoColumn((y) => tiles[size * y + x]);
+
+  @override
+  String toString() {
+    return tiles.toString();
+  }
 }
 
 class BingoColumn {
