@@ -20,7 +20,9 @@ class Bloc {
   final _field = StreamedProperty<BingoField>();
   ValueObservable<BingoField> get fieldStream => _field.stream;
 
-  final votedWords = <String>{};
+  final _votedWords = <String>{};
+  Set<String> get wordsToVoteFor =>
+      game.votes.map((v) => v.label).toSet().difference(_votedWords);
 
   // Firestore helpers.
   CollectionReference get _firestoreGames =>
@@ -106,6 +108,7 @@ class Bloc {
 
   // Votes for a label.
   Future<void> voteFor(String label) async {
+    _votedWords.add(label);
     var vote = game.getVote(label);
     var upvoted = vote.voteFor();
     var g = game.copyWithUpdatedVote(original: vote, updated: upvoted);
@@ -128,6 +131,7 @@ class Bloc {
 
   // Votes against a label.
   Future<void> voteAgainst(String label) async {
+    _votedWords.add(label);
     var vote = game.getVote(label);
     var g =
         game.copyWithUpdatedVote(original: vote, updated: vote.voteAgainst());

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../bloc/bloc.dart';
 import '../widgets/bingo_tile.dart';
+import '../widgets/share_game_button.dart';
 import 'play_game.dart';
 
 class SelectWordsScreen extends StatefulWidget {
@@ -83,12 +84,7 @@ class _SelectWordsScreenState extends State<SelectWordsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      appBar: AppBar(
-        elevation: 0,
-        actions: <Widget>[
-          IconButton(icon: Icon(Icons.code), onPressed: () {}),
-        ],
-      ),
+      appBar: AppBar(elevation: 0, actions: <Widget>[ShareGameButton()]),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
