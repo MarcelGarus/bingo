@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../bloc/bloc.dart';
 import '../screens/select_words.dart';
+import '../widgets/bold_buttons.dart';
 import '../widgets/size_selector.dart';
 import '../widgets/words_input.dart';
 
@@ -16,7 +17,7 @@ class _CreateGameScreenState extends State<CreateGameScreen> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Colors.white,
       body: ListView(
         padding: MediaQuery.of(context).padding +
             EdgeInsets.symmetric(horizontal: 8, vertical: 16),
@@ -37,10 +38,9 @@ class _CreateGameScreenState extends State<CreateGameScreen> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        icon: Icon(Icons.play_arrow),
-        label: Text('Start the game'),
-        backgroundColor: Colors.white,
+      floatingActionButton: BoldRaisedButton(
+        label: 'Start the game',
+        color: Colors.red,
         onPressed: () async {
           await Bloc.of(context)
               .createGame(size: size, labels: Set.from(words));

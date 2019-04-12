@@ -8,8 +8,12 @@ import '../widgets/vote.dart';
 class PlayGameScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
-      appBar: AppBar(elevation: 0, actions: <Widget>[ShareGameButton()]),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.white,
+        actions: <Widget>[ShareGameButton()],
+      ),
       body: SafeArea(
         child: Center(
           child: StreamBuilder<BingoField>(
@@ -19,6 +23,25 @@ class PlayGameScreen extends StatelessWidget {
               if (!snapshot.hasData) {
                 return CircularProgressIndicator();
               }
+
+              return Stack(
+                children: <Widget>[
+                  Center(
+                    child: BingoFieldView(
+                      field: snapshot.data,
+                      onTilePressed: (tile) async {
+                        await Bloc.of(context).proposeMarking(tile.label);
+                      },
+                    ),
+                  ),
+                  VoteWidget(
+                    word: 'Wolle sagt "nich"',
+                    onAccepted: () {},
+                    onRejected: () {},
+                    isVisible: true,
+                  ),
+                ],
+              );
 
               // If there are words to vote for, let the user vote.
               var wordsToVoteFor = Bloc.of(context).wordsToVoteFor;
@@ -30,19 +53,6 @@ class PlayGameScreen extends StatelessWidget {
                   onRejected: () => Bloc.of(context).voteAgainst(word),
                 );
               }
-
-              // Otherwise, just display the field.
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  BingoFieldView(
-                    field: snapshot.data,
-                    onTilePressed: (tile) async {
-                      await Bloc.of(context).proposeMarking(tile.label);
-                    },
-                  ),
-                ],
-              );
             },
           ),
         ),

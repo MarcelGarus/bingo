@@ -37,3 +37,32 @@ Vote _firestoreToVote(dynamic doc) {
     votesAgainst: doc['votesAgainst'] as int,
   );
 }
+
+String _simpleHash(String input) {
+  var hash = 0;
+  for (var unit in input.codeUnits) {
+    hash = (123 * hash + unit) % 10000;
+  }
+  return '$hash';
+}
+
+String codeToQr(String code) => 'bingo:$code:${_simpleHash(code)}';
+
+String qrToCode(String qr) {
+  var invalidError = () => ArgumentError('Not a bingo qr code.');
+
+  if (!qr.startsWith('bingo:')) throw invalidError();
+
+  var startOfCode = qr.indexOf(':') + 1;
+  if (startOfCode == -1) throw invalidError();
+
+  var startOfHash = qr.indexOf(':', startOfCode + 1) + 1;
+  if (startOfHash == -1) throw invalidError();
+
+  var code = qr.substring(startOfCode, startOfHash - 1);
+  var hash = qr.substring(startOfHash);
+
+  if (_simpleHash(code) != hash) throw invalidError();
+
+  return code;
+}

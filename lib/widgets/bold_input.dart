@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class HoveredInput extends StatelessWidget {
@@ -11,19 +13,22 @@ class HoveredInput extends StatelessWidget {
   final _controller = TextEditingController();
 
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(16),
-      elevation: 2,
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(color: Colors.black, width: 4)),
+      ),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
+        padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
         child: Row(
           children: <Widget>[
             Expanded(
               child: TextField(
                 controller: _controller,
-                decoration:
-                    InputDecoration(border: InputBorder.none, hintText: hint),
+                decoration: InputDecoration(
+                  hintText: hint,
+                  border: InputBorder.none,
+                ),
+                onSubmitted: onDone,
               ),
             ),
             IconButton(

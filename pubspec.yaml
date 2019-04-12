@@ -27,4 +27,4 @@ flutter:
   fonts:
     - family: Signature
       fonts:
-        - asset: "assets/Rubik-Regular.ttf"
+        - asset: "assets/NotoSans-Bold.ttf"

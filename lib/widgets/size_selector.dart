@@ -41,26 +41,20 @@ class SizeButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: Material(
-        elevation: isEnabled ? 2 : 0,
+      child: InkWell(
+        onTap: onPressed,
         borderRadius: BorderRadius.circular(16),
-        color: isEnabled ? Colors.white : Theme.of(context).primaryColor,
-        child: InkWell(
-          onTap: onPressed,
-          child: AnimatedContainer(
-            duration: Duration(milliseconds: 200),
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: isEnabled ? Colors.transparent : Colors.black,
-                width: isEnabled ? 0 : 2,
-              ),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            width: 48,
-            height: 48,
-            alignment: Alignment.center,
-            child: Text('${size}x$size'),
+        child: AnimatedContainer(
+          duration: Duration(milliseconds: 150),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black, width: 4),
+            borderRadius: BorderRadius.circular(16),
+            color: isEnabled ? Colors.red : Colors.white,
           ),
+          width: 48,
+          height: 48,
+          alignment: Alignment.center,
+          child: Text('${size}x$size'),
         ),
       ),
     );

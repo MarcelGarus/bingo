@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 import '../bloc/models.dart';
+import 'bold_material.dart';
 
 class BingoTileView extends StatelessWidget {
   BingoTileView({
@@ -17,21 +18,17 @@ class BingoTileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8),
-      child: Material(
-        color: tile.state == BingoTileState.marked
-            ? Theme.of(context).primaryColor
-            : Colors.white,
-        elevation: tile.state == BingoTileState.unmarked ? 2 : 0,
-        borderRadius: BorderRadius.circular(16),
-        child: InkWell(
-          onTap: onPressed,
-          borderRadius: BorderRadius.circular(16),
-          child: Container(
-            width: 128,
-            height: 128,
-            alignment: Alignment.center,
-            child: _buildContent(),
-          ),
+      child: BoldMaterial(
+        onTap: onPressed,
+        splashColor: Colors.amber,
+        child: Container(
+          width: 128,
+          height: 128,
+          color: tile.state == BingoTileState.marked
+              ? Colors.amber
+              : Colors.transparent,
+          alignment: Alignment.center,
+          child: _buildContent(),
         ),
       ),
     );
@@ -40,13 +37,13 @@ class BingoTileView extends StatelessWidget {
   Widget _buildContent() {
     if (tile.state == BingoTileState.voting) {
       return CircularProgressIndicator(
-        valueColor: AlwaysStoppedAnimation(Colors.white),
+        valueColor: AlwaysStoppedAnimation(Colors.red),
       );
     } else {
       return AutoSizeText(
         tile.label,
         textAlign: TextAlign.center,
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 36),
+        style: TextStyle(fontWeight: FontWeight.w900, fontSize: 36),
       );
     }
   }

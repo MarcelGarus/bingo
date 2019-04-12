@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'hovered_input.dart';
+import 'bold_input.dart';
 
 class WordsInput extends StatelessWidget {
   WordsInput({
@@ -17,27 +17,30 @@ class WordsInput extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Wrap(
-          children: words
-              .map((word) {
-                return Chip(
-                  label: Text(word),
-                  backgroundColor: Colors.white,
-                  elevation: 2,
-                  onDeleted: () {
-                    onWordsChanged(words.where((w) => w != word).toList());
-                  },
-                );
-              })
-              .expand((c) => [c, SizedBox(width: 8)])
-              .toList(),
+          crossAxisAlignment: WrapCrossAlignment.center,
+          alignment: WrapAlignment.center,
+          runAlignment: WrapAlignment.center,
+          spacing: 8,
+          children: words.map((word) {
+            return Chip(
+              label: Text(word),
+              backgroundColor: Colors.white,
+              onDeleted: () {
+                onWordsChanged(words.where((w) => w != word).toList());
+              },
+            );
+          }).toList(),
         ),
         SizedBox(height: words.isEmpty ? 0 : 16),
-        HoveredInput(
-          hint: 'Add a word',
-          onDone: (word) {
-            if (word.trim().isEmpty) return;
-            onWordsChanged(words.followedBy([word]).toList());
-          },
+        SizedBox(
+          width: 300,
+          child: HoveredInput(
+            hint: 'Add a word',
+            onDone: (word) {
+              if (word.trim().isEmpty) return;
+              onWordsChanged(words.followedBy([word]).toList());
+            },
+          ),
         ),
       ],
     );
