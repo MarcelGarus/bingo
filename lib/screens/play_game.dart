@@ -5,7 +5,14 @@ import '../widgets/bingo_field.dart';
 import '../widgets/share_game_button.dart';
 import '../widgets/vote.dart';
 
-class PlayGameScreen extends StatelessWidget {
+class PlayGameScreen extends StatefulWidget {
+  @override
+  _PlayGameScreenState createState() => _PlayGameScreenState();
+}
+
+class _PlayGameScreenState extends State<PlayGameScreen> {
+  String _wordToVoteFor;
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -24,6 +31,12 @@ class PlayGameScreen extends StatelessWidget {
                 return CircularProgressIndicator();
               }
 
+              var wordsToVoteFor = Bloc.of(context).wordsToVoteFor;
+              var wordToVoteForAvailable = wordsToVoteFor.isNotEmpty;
+              if (wordToVoteForAvailable) {
+                _wordToVoteFor = wordsToVoteFor.first;
+              }
+
               return Stack(
                 children: <Widget>[
                   Center(
@@ -35,24 +48,14 @@ class PlayGameScreen extends StatelessWidget {
                     ),
                   ),
                   VoteWidget(
-                    word: 'Wolle sagt "nich"',
-                    onAccepted: () {},
-                    onRejected: () {},
-                    isVisible: true,
+                    word: _wordToVoteFor ?? '',
+                    onAccepted: () => Bloc.of(context).voteFor(_wordToVoteFor),
+                    onRejected: () =>
+                        Bloc.of(context).voteAgainst(_wordToVoteFor),
+                    isVisible: wordToVoteForAvailable,
                   ),
                 ],
               );
-
-              // If there are words to vote for, let the user vote.
-              var wordsToVoteFor = Bloc.of(context).wordsToVoteFor;
-              if (wordsToVoteFor.isNotEmpty) {
-                var word = wordsToVoteFor.first;
-                return VoteWidget(
-                  word: word,
-                  onAccepted: () => Bloc.of(context).voteFor(word),
-                  onRejected: () => Bloc.of(context).voteAgainst(word),
-                );
-              }
             },
           ),
         ),

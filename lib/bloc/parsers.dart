@@ -4,9 +4,9 @@ Map<String, dynamic> _gameToFirestore(BingoGame game) {
   return {
     'size': game.size,
     'numPlayers': game.numPlayers,
-    'labels': List.from(game.labels),
-    'voteQueue': List.from(game.votes),
-    'marked': List.from(game.marked),
+    'labels': game.labels.toList(),
+    'voteQueue': game.votes.map(_voteToFirestore).toList(),
+    'marked': game.marked.toList(),
   };
 }
 

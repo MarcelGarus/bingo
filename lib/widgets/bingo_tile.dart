@@ -38,6 +38,7 @@ class BingoTileView extends StatelessWidget {
     if (tile.state == BingoTileState.voting) {
       return CircularProgressIndicator(
         valueColor: AlwaysStoppedAnimation(Colors.red),
+        strokeWidth: 8,
       );
     } else {
       return AutoSizeText(
