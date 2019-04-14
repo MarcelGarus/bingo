@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../bloc/bloc.dart';
 import '../widgets/bingo_field.dart';
+import '../widgets/gradient_background.dart';
 import '../widgets/share_game_button.dart';
 import '../widgets/vote.dart';
 
@@ -15,50 +16,50 @@ class _PlayGameScreenState extends State<PlayGameScreen> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        actions: <Widget>[ShareGameButton()],
-      ),
-      body: SafeArea(
-        child: Center(
-          child: StreamBuilder<BingoField>(
-            stream: Bloc.of(context).fieldStream,
-            builder: (context, snapshot) {
-              // If there is no field yet, just display a loading spinner.
-              if (!snapshot.hasData) {
-                return CircularProgressIndicator();
-              }
+      body: Stack(
+        children: <Widget>[
+          GradientBackground(),
+          SafeArea(
+            child: Center(
+              child: StreamBuilder<BingoField>(
+                stream: Bloc.of(context).fieldStream,
+                builder: (context, snapshot) {
+                  // If there is no field yet, just display a loading spinner.
+                  if (!snapshot.hasData) {
+                    return CircularProgressIndicator();
+                  }
 
-              var wordsToVoteFor = Bloc.of(context).wordsToVoteFor;
-              var wordToVoteForAvailable = wordsToVoteFor.isNotEmpty;
-              if (wordToVoteForAvailable) {
-                _wordToVoteFor = wordsToVoteFor.first;
-              }
+                  var wordsToVoteFor = Bloc.of(context).wordsToVoteFor;
+                  var wordToVoteForAvailable = wordsToVoteFor.isNotEmpty;
+                  if (wordToVoteForAvailable) {
+                    _wordToVoteFor = wordsToVoteFor.first;
+                  }
 
-              return Stack(
-                children: <Widget>[
-                  Center(
-                    child: BingoFieldView(
-                      field: snapshot.data,
-                      onTilePressed: (tile) async {
-                        await Bloc.of(context).proposeMarking(tile.label);
-                      },
-                    ),
-                  ),
-                  VoteWidget(
-                    word: _wordToVoteFor ?? '',
-                    onAccepted: () => Bloc.of(context).voteFor(_wordToVoteFor),
-                    onRejected: () =>
-                        Bloc.of(context).voteAgainst(_wordToVoteFor),
-                    isVisible: wordToVoteForAvailable,
-                  ),
-                ],
-              );
-            },
+                  return Stack(
+                    children: <Widget>[
+                      Center(
+                        child: BingoFieldView(
+                          field: snapshot.data,
+                          onTilePressed: (tile) async {
+                            await Bloc.of(context).proposeMarking(tile.label);
+                          },
+                        ),
+                      ),
+                      VoteWidget(
+                        word: _wordToVoteFor ?? '',
+                        onAccepted: () =>
+                            Bloc.of(context).voteFor(_wordToVoteFor),
+                        onRejected: () =>
+                            Bloc.of(context).voteAgainst(_wordToVoteFor),
+                        isVisible: wordToVoteForAvailable,
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

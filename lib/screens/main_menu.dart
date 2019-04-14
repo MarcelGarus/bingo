@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../widgets/bold_buttons.dart';
+import '../widgets/gradient_background.dart';
 import '../widgets/vote.dart';
 import 'create_game.dart';
 import 'join_game.dart';
@@ -19,16 +20,16 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Stack(
         children: <Widget>[
+          GradientBackground(),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Container(),
-              BoldRaisedButton(
-                color: Colors.purple,
+              MyFlatButton(
+                color: Colors.white,
                 label: 'Create new game',
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
@@ -37,8 +38,8 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                 },
               ),
               SizedBox(height: 16),
-              BoldRaisedButton(
-                color: Colors.deepOrange,
+              MyFlatButton(
+                color: Colors.white,
                 label: 'Join game',
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
@@ -47,7 +48,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                 },
               ),
               SizedBox(height: 16),
-              BoldFlatButton(
+              MyRaisedButton(
                 label: 'Vote',
                 color: Colors.green,
                 onPressed: _toggle,

@@ -142,7 +142,7 @@ class Bloc {
     }
 
     await _firestoreGames.document(g.id).setData({
-      'voteQueue': List.from(g.votes),
+      'voteQueue': g.votes.map(_voteToFirestore).toList(),
     }, merge: true);
     _game.value = g;
     _onUpdate(g);

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../bloc/bloc.dart';
 import '../widgets/bingo_tile.dart';
+import '../widgets/gradient_background.dart';
 import '../widgets/share_game_button.dart';
 import 'play_game.dart';
 
@@ -83,28 +84,31 @@ class _SelectWordsScreenState extends State<SelectWordsScreen> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        actions: <Widget>[ShareGameButton()],
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
+      body: Stack(
         children: <Widget>[
-          Container(),
-          BingoTileView(
-            tile: BingoTile(word1 ?? ''),
-            onPressed: () => _selectWord(word1),
-          ),
-          Padding(
-            padding: EdgeInsets.all(16),
-            child: Text('vs', style: TextStyle(fontSize: 16)),
-          ),
-          BingoTileView(
-            tile: BingoTile(word2 ?? ''),
-            onPressed: () => _selectWord(word2),
+          GradientBackground(),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Container(),
+              Align(
+                alignment: Alignment.centerRight,
+                child: ShareGameButton(),
+              ),
+              BingoTileView(
+                tile: BingoTile(word1 ?? ''),
+                onPressed: () => _selectWord(word1),
+              ),
+              Padding(
+                padding: EdgeInsets.all(16),
+                child: Text('vs', style: TextStyle(fontSize: 16)),
+              ),
+              BingoTileView(
+                tile: BingoTile(word2 ?? ''),
+                onPressed: () => _selectWord(word2),
+              ),
+            ],
           ),
         ],
       ),

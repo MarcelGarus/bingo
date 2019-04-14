@@ -47,9 +47,8 @@ class SizeButton extends StatelessWidget {
         child: AnimatedContainer(
           duration: Duration(milliseconds: 150),
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.black, width: 4),
             borderRadius: BorderRadius.circular(16),
-            color: isEnabled ? Colors.red : Colors.white,
+            color: isEnabled ? Colors.white70 : Colors.white24,
           ),
           width: 48,
           height: 48,
