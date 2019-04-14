@@ -46,7 +46,18 @@ class _CreateGameScreenState extends State<CreateGameScreen> {
           ),
         ],
       ),
-      floatingActionButton: MyRaisedButton(
+      floatingActionButton: _buildFab(),
+    );
+  }
+
+  Widget _buildFab() {
+    if (words.length <= size * size) {
+      return Text(
+        'Enter at least ${size * size + 1} words.',
+        style: TextStyle(color: Colors.white),
+      );
+    } else {
+      return MyRaisedButton(
         label: 'Start the game',
         color: Colors.white,
         onPressed: () async {
@@ -58,7 +69,7 @@ class _CreateGameScreenState extends State<CreateGameScreen> {
             ));
           });
         },
-      ),
-    );
+      );
+    }
   }
 }

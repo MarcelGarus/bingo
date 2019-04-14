@@ -45,6 +45,7 @@ class _PlayGameScreenState extends State<PlayGameScreen> {
                           },
                         ),
                       ),
+                      Positioned(right: 0, bottom: 0, child: ShareGameButton()),
                       VoteWidget(
                         word: _wordToVoteFor ?? '',
                         onAccepted: () =>
