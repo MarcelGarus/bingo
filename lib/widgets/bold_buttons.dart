@@ -71,25 +71,5 @@ class MyRaisedButton extends StatelessWidget {
         ),
       ),
     );
-    return RaisedButton(
-      color: Colors.transparent,
-      onPressed: onPressed,
-      elevation: 0,
-      highlightElevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      highlightColor: color.withOpacity(0.2),
-      splashColor: color.withOpacity(0.4),
-      padding: const EdgeInsets.all(16),
-      child: Text(
-        label,
-        style: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.w900,
-          color: color,
-        ),
-      ),
-    );
   }
 }

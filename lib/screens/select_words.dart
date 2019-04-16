@@ -97,7 +97,7 @@ class _SelectWordsScreenState extends State<SelectWordsScreen> {
                 child: ShareGameButton(),
               ),
               BingoTileView(
-                tile: BingoTile(word1 ?? ''),
+                tile: BingoTile.unmarked(word1 ?? ''),
                 onPressed: () => _selectWord(word1),
               ),
               Padding(
@@ -105,7 +105,7 @@ class _SelectWordsScreenState extends State<SelectWordsScreen> {
                 child: Text('vs', style: TextStyle(fontSize: 16)),
               ),
               BingoTileView(
-                tile: BingoTile(word2 ?? ''),
+                tile: BingoTile.unmarked(word2 ?? ''),
                 onPressed: () => _selectWord(word2),
               ),
             ],

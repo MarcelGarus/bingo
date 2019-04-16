@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:rxdart/rxdart.dart';
@@ -22,7 +20,7 @@ class Bloc {
 
   final _votedWords = <String>{};
   Set<String> get wordsToVoteFor =>
-      game.votes.map((v) => v.label).toSet().difference(_votedWords);
+      game.polls.map((v) => v.word).toSet().difference(_votedWords);
 
   // Firestore helpers.
   CollectionReference get _firestoreGames =>
@@ -76,7 +74,7 @@ class Bloc {
   /// Selects labels.
   Future<void> selectLabels(Set<String> labels) async {
     // Create a field and add it to the UI stream.
-    _field.value = BingoField.fromLabels(size: game.size, labels: labels);
+    _field.value = BingoField.fromWords(size: game.size, words: labels);
 
     // From now on, subscribe to updates to the game and update the field
     // accordingly.
@@ -86,14 +84,24 @@ class Bloc {
   }
 
   void _onUpdate(BingoGame game) {
-    _field.value = _field.value.withTileStates((label) {
-      if (game.marked.contains(label)) {
-        return BingoTileState.marked;
-      } else if (game.votes.any((vote) => vote.label == label)) {
-        return BingoTileState.voting;
-      } else {
-        return BingoTileState.unmarked;
+    _field.value = _field.value.withUpdatedTiles((tile) {
+      var word = tile.word;
+
+      // If the game contains the word in the list of marked words, the tile is
+      // marked.
+      if (game.marked.contains(word)) {
+        return BingoTile.marked(word);
       }
+
+      // If there exists a voting about the word, the tile is being voted on.
+      var poll = game.polls
+          .singleWhere((poll) => poll.word == word, orElse: () => null);
+      if (poll != null) {
+        return BingoTile.polled(word, poll);
+      }
+
+      // Otherwise, the tile is unmarked.
+      return BingoTile.unmarked(word);
     });
     _game.value = game;
   }
@@ -101,7 +109,11 @@ class Bloc {
   // Propose a marking to the crowd.
   Future<void> proposeMarking(String label) async {
     _game.value = game.copyWith(
-      votes: game.votes..add(Vote.newVote(label: label)),
+      polls: game.polls
+        ..add(Poll.newPoll(
+          word: label,
+          numPlayers: game.numPlayers,
+        )),
     );
     await voteFor(label);
   }
@@ -109,18 +121,18 @@ class Bloc {
   // Votes for a label.
   Future<void> voteFor(String label) async {
     _votedWords.add(label);
-    var vote = game.getVote(label);
+    var vote = game.getPoll(label);
     var upvoted = vote.voteFor();
-    var g = game.copyWithUpdatedVote(original: vote, updated: upvoted);
+    var g = game.copyWithUpdatedPoll(original: vote, updated: upvoted);
 
-    if (upvoted.isApproved(g.numPlayers)) {
-      g = game.copyWithUpdatedVote(original: vote, updated: null).copyWith(
+    if (upvoted.isApproved) {
+      g = game.copyWithUpdatedPoll(original: vote, updated: null).copyWith(
             marked: g.marked.union({label}),
           );
     }
 
     await _firestoreGames.document(g.id).setData({
-      'voteQueue': g.votes.map(_voteToFirestore).toList(),
+      'polls': g.polls.map(_voteToFirestore).toList(),
       'marked': g.marked.toList(),
     }, merge: true);
     _game.value = g;
@@ -132,17 +144,17 @@ class Bloc {
   // Votes against a label.
   Future<void> voteAgainst(String label) async {
     _votedWords.add(label);
-    var vote = game.getVote(label);
+    var vote = game.getPoll(label);
     var g =
-        game.copyWithUpdatedVote(original: vote, updated: vote.voteAgainst());
+        game.copyWithUpdatedPoll(original: vote, updated: vote.voteAgainst());
 
-    if (vote.isRejected(g.numPlayers)) {
+    if (vote.isRejected) {
       vote = null;
-      g = game.copyWithUpdatedVote(original: vote, updated: null);
+      g = game.copyWithUpdatedPoll(original: vote, updated: null);
     }
 
     await _firestoreGames.document(g.id).setData({
-      'voteQueue': g.votes.map(_voteToFirestore).toList(),
+      'polls': g.polls.map(_voteToFirestore).toList(),
     }, merge: true);
     _game.value = g;
     _onUpdate(g);

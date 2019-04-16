@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:screen/screen.dart';
 
 import '../bloc/bloc.dart';
 import '../widgets/bingo_field.dart';
@@ -13,6 +14,16 @@ class PlayGameScreen extends StatefulWidget {
 
 class _PlayGameScreenState extends State<PlayGameScreen> {
   String _wordToVoteFor;
+
+  void initState() {
+    super.initState();
+    Screen.keepOn(true);
+  }
+
+  void dispose() {
+    super.dispose();
+    Screen.keepOn(false);
+  }
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +52,7 @@ class _PlayGameScreenState extends State<PlayGameScreen> {
                         child: BingoFieldView(
                           field: snapshot.data,
                           onTilePressed: (tile) async {
-                            await Bloc.of(context).proposeMarking(tile.label);
+                            await Bloc.of(context).proposeMarking(tile.word);
                           },
                         ),
                       ),

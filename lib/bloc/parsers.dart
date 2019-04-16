@@ -5,36 +5,42 @@ Map<String, dynamic> _gameToFirestore(BingoGame game) {
     'size': game.size,
     'numPlayers': game.numPlayers,
     'labels': game.labels.toList(),
-    'voteQueue': game.votes.map(_voteToFirestore).toList(),
+    'polls': game.polls.map(_voteToFirestore).toList(),
     'marked': game.marked.toList(),
   };
 }
 
 BingoGame _firestoreToGame(String id, dynamic doc) {
+  int numPlayers = doc['numPlayers'];
   return BingoGame(
     id: id,
     size: doc['size'] as int,
-    numPlayers: doc['numPlayers'] as int,
+    numPlayers: numPlayers,
     labels: Set<String>.from(doc['labels'] as List),
-    votes:
-        Set<Vote>.from((doc['voteQueue'] as List).map<Vote>(_firestoreToVote)),
+    polls: Set<Poll>.from((doc['polls'] as List).map<Poll>((doc) {
+      return _firestoreToPoll(doc, numPlayers);
+    })),
     marked: Set<String>.from(doc['marked'] as List),
   );
 }
 
-Map<String, dynamic> _voteToFirestore(Vote vote) {
+Map<String, dynamic> _voteToFirestore(Poll vote) {
   return {
-    'label': vote.label,
-    'votesFor': vote.votesFor,
-    'votesAgainst': vote.votesAgainst,
+    'word': vote.word,
+    'votesFor': vote.votesApprove,
+    'votesAgainst': vote.votesReject,
+    'deadline': vote.deadline,
   };
 }
 
-Vote _firestoreToVote(dynamic doc) {
-  return Vote(
-    label: doc['label'] as String,
-    votesFor: doc['votesFor'] as int,
-    votesAgainst: doc['votesAgainst'] as int,
+Poll _firestoreToPoll(dynamic doc, int numPlayers) {
+  return Poll(
+    word: doc['word'] as String,
+    votesApprove: doc['votesFor'] as int,
+    votesReject: doc['votesAgainst'] as int,
+    numPlayers: numPlayers,
+    deadline: DateTime.fromMicrosecondsSinceEpoch(
+        (doc['deadline'] as Timestamp).microsecondsSinceEpoch),
   );
 }
 

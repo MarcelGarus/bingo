@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 
 import 'bingo_tile.dart';
 
-/// A bingo field. Can be created by providing a bunch of phrases, like:
+/// A bingo field. Can be created by providing a bunch of words, like:
 /// ```dart
 /// var field = BingoField.fromShuffled(
 ///   size: 4,
@@ -29,31 +29,30 @@ class BingoField {
         assert(tiles != null),
         assert(tiles.length == size * size);
 
-  /// Creates a new bingo field that contains the given labels.
-  factory BingoField.fromLabels({
+  /// Creates a new bingo field that contains the given words.
+  factory BingoField.fromWords({
     @required int size,
-    @required Set<String> labels,
+    @required Set<String> words,
   }) {
     return BingoField(
       size: size,
-      tiles: List<BingoTile>.from(labels.map((label) => BingoTile(label)))
+      tiles: List<BingoTile>.from(words.map((word) => BingoTile.unmarked(word)))
         ..shuffle(),
     );
   }
 
-  /// Returns a copy of this bingo field, but the tile with the given label is
-  /// marked.
-  BingoField withTileStates(BingoTileState Function(String label) getState) {
+  /// Returns a copy of this bingo field, but all the tiles are mapped using the
+  /// given function.
+  BingoField withUpdatedTiles(BingoTile Function(BingoTile tile) updateTile) {
     return BingoField(
       size: size,
-      tiles: tiles
-          .map((tile) => BingoTile(tile.label, state: getState(tile.label)))
-          .toList(growable: false),
+      tiles: tiles.map((tile) => updateTile(tile)).toList(growable: false),
     );
   }
 
   /// Returns a BingoColumn (a helper class) that also overloads the []
-  /// operator, allowing for referencing fields at (x,y) using BingoField[x][y].
+  /// operator, allowing for referencing fields at (x,y) using the syntax
+  /// `BingoField[x][y]`.
   operator [](int x) => BingoColumn((y) => tiles[size * y + x]);
 
   @override

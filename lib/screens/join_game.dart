@@ -38,7 +38,7 @@ class _GameCodeInputState extends State<_GameCodeInput> {
   void _joinGame(String code) async {
     try {
       await Bloc.of(context).joinGame(code);
-    } on StateError catch (e) {
+    } on StateError catch (_) {
       _showSnackBar("Couldn't find the game with code $code.");
       return;
     }
