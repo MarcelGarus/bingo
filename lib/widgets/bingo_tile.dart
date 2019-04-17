@@ -5,6 +5,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 import '../bloc/models.dart';
+import '../theme.dart';
 
 class BingoTileView extends ImplicitlyAnimatedWidget {
   BingoTileView({
@@ -27,6 +28,7 @@ class _BingoTileViewState extends AnimatedWidgetBaseState<BingoTileView> {
   ColorTween _foregroundTween;
   Tween<double> _approveTween;
   Tween<double> _rejectTween;
+  Tween<double> _borderOpacityTween;
 
   @override
   void forEachTween(TweenVisitor visitor) {
@@ -54,50 +56,61 @@ class _BingoTileViewState extends AnimatedWidgetBaseState<BingoTileView> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8),
-      child: Stack(
-        children: <Widget>[
-          Positioned.fill(
-            child: Material(
-              color: _backgroundTween.evaluate(animation),
-              borderRadius: BorderRadius.circular(16),
-              child: Center(
-                child: AutoSizeText(
-                  tile.word,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w900,
-                    fontSize: 36,
-                    color: _foregroundTween.evaluate(animation),
+    return Container(
+      width: 128,
+      height: 128,
+      margin: const EdgeInsets.all(8),
+      child: Transform.scale(
+        scale: !tile.isMarked
+            ? 1.0
+            : 2.0 -
+                max(
+                  Curves.bounceOut.transform(animation.value),
+                  1.0 - Curves.fastOutSlowIn.transform(animation.value),
+                ),
+        child: Stack(
+          children: <Widget>[
+            Positioned.fill(
+              child: Material(
+                color: _backgroundTween.evaluate(animation),
+                borderRadius: BorderRadius.circular(16),
+                child: Center(
+                  child: AutoSizeText(
+                    tile.word,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 36,
+                      color: _foregroundTween.evaluate(animation),
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          Material(
-            type: MaterialType.transparency,
-            child: InkWell(
-              onTap: tile.isUnmarked ? widget.onPressed : null,
-              splashColor: Theme.of(context).primaryColor.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(16),
-              child: SizedBox(width: 128, height: 128, child: _buildContent()),
+            Material(
+              type: MaterialType.transparency,
+              child: InkWell(
+                onTap: tile.isUnmarked ? widget.onPressed : null,
+                splashColor: kPrimaryColor.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(16),
+                child:
+                    SizedBox(width: 128, height: 128, child: _buildContent()),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildContent() {
-    if (tile.state == BingoTileState.polled) {
-      return PollBorder(
+    return Opacity(
+      opacity: _borderOpacityTween.evaluate(animation),
+      child: PollBorder(
         approveRatio: _approveTween.evaluate(animation),
         rejectRatio: _rejectTween.evaluate(animation),
-      );
-    } else {
-      return Container(width: double.infinity, height: double.infinity);
-    }
+      ),
+    );
   }
 }
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'bold_input.dart';
+import 'input.dart';
 
 class WordsInput extends StatelessWidget {
   WordsInput({

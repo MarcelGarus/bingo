@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 
 import '../bloc/bloc.dart';
 import '../screens/select_words.dart';
-import '../widgets/bold_buttons.dart';
-import '../widgets/bold_input.dart';
+import '../widgets/buttons.dart';
+import '../widgets/input.dart';
 import '../widgets/gradient_background.dart';
 
 class JoinGameScreen extends StatelessWidget {
