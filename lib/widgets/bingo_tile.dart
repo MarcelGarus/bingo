@@ -13,7 +13,10 @@ class BingoTileView extends ImplicitlyAnimatedWidget {
     @required this.onPressed,
   })  : assert(tile != null),
         assert(onPressed != null),
-        super(duration: Duration(milliseconds: 300));
+        super(
+          duration: Duration(milliseconds: 800),
+          curve: Curves.easeInOut,
+        );
 
   final BingoTile tile;
   final VoidCallback onPressed;
@@ -50,6 +53,11 @@ class _BingoTileViewState extends AnimatedWidgetBaseState<BingoTileView> {
     _rejectTween = visitor(
       _rejectTween,
       tile.isPolled ? (tile.poll.votesReject / tile.poll.numPlayers) : 0.0,
+      (dynamic val) => Tween<double>(begin: val),
+    );
+    _borderOpacityTween = visitor(
+      _borderOpacityTween,
+      tile.isMarked ? 0.0 : 1.0,
       (dynamic val) => Tween<double>(begin: val),
     );
   }
