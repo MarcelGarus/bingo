@@ -1,9 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
-class HoveredInput extends StatelessWidget {
-  HoveredInput({
+class MyInput extends StatelessWidget {
+  MyInput({
     @required this.hint,
     @required this.onDone,
   });
@@ -15,7 +13,7 @@ class HoveredInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: Colors.black, width: 4)),
+        border: Border(bottom: BorderSide(color: Colors.white, width: 3)),
       ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
@@ -26,13 +24,15 @@ class HoveredInput extends StatelessWidget {
                 controller: _controller,
                 decoration: InputDecoration(
                   hintText: hint,
+                  hintStyle: TextStyle(color: Colors.white54),
                   border: InputBorder.none,
                 ),
+                style: TextStyle(color: Colors.white),
                 onSubmitted: onDone,
               ),
             ),
             IconButton(
-              icon: Icon(Icons.done),
+              icon: Icon(Icons.done, color: Colors.white),
               onPressed: () => onDone(_controller.text),
             ),
           ],

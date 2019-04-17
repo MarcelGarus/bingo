@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'bold_buttons.dart';
-import 'bold_material.dart';
 
 class VoteWidget extends ImplicitlyAnimatedWidget {
   VoteWidget({
@@ -29,46 +28,55 @@ class _VoteWidgetState extends AnimatedWidgetBaseState<VoteWidget> {
   void forEachTween(TweenVisitor visitor) {
     _transformTween = visitor(
       _transformTween,
-      widget.isVisible ? 16.0 : -160.0,
+      widget.isVisible ? 0.0 : 1.0,
       (dynamic val) => Tween<double>(begin: val),
     );
   }
 
   Widget build(BuildContext context) {
     return Positioned(
-      bottom: _transformTween.evaluate(animation),
-      left: 16,
-      right: 16,
+      bottom: 0,
+      left: 0,
+      right: 0,
       child: RepaintBoundary(
         key: ValueKey('Voting dialog'),
-        child: BoldMaterial(
+        child: FractionalTranslation(
+          translation: Offset(0, _transformTween.evaluate(animation)),
           child: Padding(
             padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text('Did this just happen?', style: TextStyle(fontSize: 16)),
-                SizedBox(height: 8),
-                Text(widget.word, style: TextStyle(fontSize: 24)),
-                SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+            child: Material(
+              borderRadius: BorderRadius.circular(16),
+              elevation: 12,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    BoldFlatButton(
-                      label: 'No',
-                      color: Colors.red,
-                      onPressed: widget.onRejected,
-                    ),
-                    SizedBox(width: 8),
-                    BoldFlatButton(
-                      label: 'Yes',
-                      color: Colors.green,
-                      onPressed: widget.onAccepted,
+                    Text('Did this just happen?',
+                        style: TextStyle(fontSize: 16)),
+                    SizedBox(height: 8),
+                    Text(widget.word, style: TextStyle(fontSize: 24)),
+                    SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        MyFlatButton(
+                          label: 'No',
+                          color: Colors.red,
+                          onPressed: widget.onRejected,
+                        ),
+                        SizedBox(width: 8),
+                        MyFlatButton(
+                          label: 'Yes',
+                          color: Colors.green,
+                          onPressed: widget.onAccepted,
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
           ),
         ),

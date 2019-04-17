@@ -1,8 +1,6 @@
-import 'dart:collection';
-
 import 'package:flutter/foundation.dart';
 
-import 'votes.dart';
+import 'poll.dart';
 
 @immutable
 class BingoGame {
@@ -10,7 +8,7 @@ class BingoGame {
   final int size;
   final int numPlayers;
   final Set<String> labels;
-  final Set<Vote> votes;
+  final Set<Poll> polls;
   final Set<String> marked;
 
   /// Rich constructor.
@@ -19,7 +17,7 @@ class BingoGame {
     @required this.size,
     @required this.numPlayers,
     @required this.labels,
-    @required this.votes,
+    @required this.polls,
     @required this.marked,
   });
 
@@ -33,7 +31,7 @@ class BingoGame {
       size: size,
       numPlayers: numPlayers,
       labels: labels,
-      votes: <Vote>{},
+      polls: <Poll>{},
       marked: <String>{},
     );
   }
@@ -44,7 +42,7 @@ class BingoGame {
     int height,
     int numPlayers,
     Set<String> labels,
-    Set<Vote> votes,
+    Set<Poll> polls,
     Set<String> marked,
   }) {
     return BingoGame(
@@ -52,22 +50,22 @@ class BingoGame {
       size: size ?? this.size,
       numPlayers: numPlayers ?? this.numPlayers,
       labels: labels ?? this.labels,
-      votes: votes ?? this.votes,
+      polls: polls ?? this.polls,
       marked: marked ?? this.marked,
     );
   }
 
-  Vote getVote(String label) {
-    return votes.firstWhere((vote) => vote.label == label);
+  Poll getPoll(String label) {
+    return polls.firstWhere((vote) => vote.word == label);
   }
 
-  BingoGame copyWithUpdatedVote({
-    @required Vote original,
-    @required Vote updated,
+  BingoGame copyWithUpdatedPoll({
+    @required Poll original,
+    @required Poll updated,
   }) {
     return copyWith(
-      votes: votes.map((vote) => vote == original ? updated : vote).toSet()
-        ..removeWhere((v) => v == null),
+      polls: polls.map((poll) => poll == original ? updated : poll).toSet()
+        ..removeWhere((poll) => poll == null),
     );
   }
 
@@ -75,7 +73,7 @@ class BingoGame {
   String toString() {
     return '{id=$id, size=$size, numPlayers=$numPlayers, '
         'labels=[${labels.join(', ')}], '
-        'voteQueue=[${votes.join(', ')}], '
+        'polls=[${polls.join(', ')}], '
         'marked=[${marked.join(', ')}]}';
   }
 }

@@ -34,7 +34,7 @@ class WordsInput extends StatelessWidget {
         SizedBox(height: words.isEmpty ? 0 : 16),
         SizedBox(
           width: 300,
-          child: HoveredInput(
+          child: MyInput(
             hint: 'Add a word',
             onDone: (word) {
               if (word.trim().isEmpty) return;

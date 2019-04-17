@@ -6,15 +6,20 @@ import '../bloc/bloc.dart';
 import '../screens/select_words.dart';
 import '../widgets/bold_buttons.dart';
 import '../widgets/bold_input.dart';
+import '../widgets/gradient_background.dart';
 
 class JoinGameScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Padding(
-        padding: MediaQuery.of(context).padding +
-            EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-        child: _GameCodeInput(),
+      body: Stack(
+        children: <Widget>[
+          GradientBackground(),
+          Padding(
+            padding: MediaQuery.of(context).padding +
+                EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            child: _GameCodeInput(),
+          ),
+        ],
       ),
     );
   }
@@ -33,7 +38,7 @@ class _GameCodeInputState extends State<_GameCodeInput> {
   void _joinGame(String code) async {
     try {
       await Bloc.of(context).joinGame(code);
-    } on StateError catch (e) {
+    } on StateError catch (_) {
       _showSnackBar("Couldn't find the game with code $code.");
       return;
     }
@@ -46,19 +51,24 @@ class _GameCodeInputState extends State<_GameCodeInput> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Center(child: Text('Join a game', style: TextStyle(fontSize: 32))),
+        Center(
+          child: Text(
+            'Join a game',
+            style: TextStyle(fontSize: 32, color: Colors.white),
+          ),
+        ),
+        SizedBox(height: 16),
+        MyRaisedButton(
+          label: 'Scan QR code',
+          color: Colors.white,
+          onPressed: scan,
+        ),
+        SizedBox(height: 16),
+        Text('or', style: TextStyle(color: Colors.white54)),
         SizedBox(height: 16),
         SizedBox(
           width: 300,
-          child: HoveredInput(hint: 'Enter the code', onDone: _joinGame),
-        ),
-        SizedBox(height: 16),
-        Text('or', style: TextStyle(color: Colors.black54)),
-        SizedBox(height: 16),
-        BoldRaisedButton(
-          label: 'Scan QR code',
-          color: Colors.red,
-          onPressed: scan,
+          child: MyInput(hint: 'Enter the code', onDone: _joinGame),
         ),
       ],
     );

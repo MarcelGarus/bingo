@@ -7,7 +7,7 @@ class ShareGameButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.share),
+      icon: Icon(Icons.share, color: Colors.white),
       onPressed: () {
         var game = Bloc.of(context).game;
         if (game == null) {

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../bloc/models.dart';
+import '../widgets/bingo_tile.dart';
 import '../widgets/bold_buttons.dart';
-import '../widgets/vote.dart';
+import '../widgets/gradient_background.dart';
 import 'create_game.dart';
 import 'join_game.dart';
 
@@ -11,24 +13,22 @@ class MainMenuScreen extends StatefulWidget {
 }
 
 class _MainMenuScreenState extends State<MainMenuScreen> {
-  bool _isVisible = false;
+  int _count = 0;
 
-  void _toggle() {
-    setState(() => _isVisible = !_isVisible);
-  }
+  void _increaseCounter() => setState(() => _count++);
 
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Stack(
         children: <Widget>[
+          GradientBackground(),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Container(),
-              BoldRaisedButton(
-                color: Colors.purple,
+              MyFlatButton(
+                color: Colors.white,
                 label: 'Create new game',
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
@@ -37,8 +37,8 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                 },
               ),
               SizedBox(height: 16),
-              BoldRaisedButton(
-                color: Colors.deepOrange,
+              MyFlatButton(
+                color: Colors.white,
                 label: 'Join game',
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
@@ -47,18 +47,29 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                 },
               ),
               SizedBox(height: 16),
-              BoldFlatButton(
+              MyRaisedButton(
                 label: 'Vote',
                 color: Colors.green,
-                onPressed: _toggle,
+                onPressed: _increaseCounter,
+              ),
+              BingoTileView(
+                tile: _count % 3 == 0
+                    ? BingoTile.unmarked('sample tile')
+                    : _count % 3 == 1
+                        ? BingoTile.polled(
+                            'sample tile',
+                            Poll(
+                              word: 'sample tile',
+                              votesApprove: 2,
+                              votesReject: 1,
+                              numPlayers: 4,
+                              deadline:
+                                  DateTime.now().add(Duration(minutes: 1)),
+                            ))
+                        : BingoTile.marked('sample tile'),
+                onPressed: () {},
               ),
             ],
-          ),
-          VoteWidget(
-            word: 'This is a sample sentence.',
-            onAccepted: _toggle,
-            onRejected: _toggle,
-            isVisible: _isVisible,
           ),
         ],
       ),
