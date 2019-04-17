@@ -1,7 +1,10 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 
 import 'screens/main_menu.dart';
 import 'bloc/bloc_provider.dart';
+import 'theme.dart';
 
 void main() => runApp(BlocProvider(child: MyApp()));
 
@@ -10,11 +13,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Bingo',
-      theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-        fontFamily: 'Signature',
-      ),
+      theme: ThemeData(primaryColor: kPrimaryColor, fontFamily: 'Signature'),
       home: MyHomePage(),
+      navigatorObservers: [
+        FirebaseAnalyticsObserver(analytics: FirebaseAnalytics()),
+      ],
     );
   }
 }

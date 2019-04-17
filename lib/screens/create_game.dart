@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../bloc/bloc.dart';
 import '../screens/select_words.dart';
-import '../widgets/bold_buttons.dart';
+import '../widgets/buttons.dart';
 import '../widgets/gradient_background.dart';
 import '../widgets/size_selector.dart';
 import '../widgets/words_input.dart';

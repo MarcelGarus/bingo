@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../theme.dart';
+
 class MyFlatButton extends StatelessWidget {
   MyFlatButton({
     @required this.label,
@@ -56,7 +58,7 @@ class MyRaisedButton extends StatelessWidget {
       shadowColor: Colors.white,
       child: InkWell(
         customBorder: StadiumBorder(),
-        splashColor: Theme.of(context).primaryColor.withOpacity(0.4),
+        splashColor: kPrimaryColor.withOpacity(0.4),
         onTap: onPressed,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),

@@ -14,6 +14,7 @@ dependencies:
   barcode_scan: ^1.0.0
   cloud_firestore: ^0.9.13
   cupertino_icons: ^0.1.2
+  firebase_analytics: ^2.1.1+2
   qr_flutter: ^2.0.0
   rxdart: ^0.21.0
   screen: ^0.0.5
