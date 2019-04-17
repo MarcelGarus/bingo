@@ -34,6 +34,9 @@ class Bloc {
   }
 
   Future<void> dispose() async {
+    if (game != null) {
+      leaveGame();
+    }
     await _game.dispose();
     await _field.dispose();
   }
@@ -66,9 +69,22 @@ class Bloc {
     var game = (await _getGame(id));
     game = game.copyWith(numPlayers: game.numPlayers + 1);
 
-    // Add the game to Firestore. If that succeeded, add it to the UI stream.
+    // Update the game in Firestore. If that succeeded, add it to the UI stream.
     await _firestoreGames.document(id).setData(_gameToFirestore(game));
     _game.value = game;
+  }
+
+  /// Leaves a game.
+  Future<void> leaveGame() async {
+    // Get the game and update its number of players.
+    var game = (await _getGame(this.game.id));
+    game = game.copyWith(numPlayers: game.numPlayers - 1);
+
+    // Update the game in Firestore. Either way, remove the game.
+    await _firestoreGames
+        .document(this.game.id)
+        .setData(_gameToFirestore(game));
+    _game.value = null;
   }
 
   /// Selects labels.

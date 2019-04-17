@@ -25,6 +25,8 @@ class _BingoTileViewState extends AnimatedWidgetBaseState<BingoTileView> {
 
   ColorTween _backgroundTween;
   ColorTween _foregroundTween;
+  Tween<double> _approveTween;
+  Tween<double> _rejectTween;
 
   @override
   void forEachTween(TweenVisitor visitor) {
@@ -35,8 +37,18 @@ class _BingoTileViewState extends AnimatedWidgetBaseState<BingoTileView> {
     );
     _foregroundTween = visitor(
       _foregroundTween,
-      tile.isUnmarked ? Colors.purple : Colors.white,
+      tile.isUnmarked ? Color(0xFF43a047) : Colors.white,
       (dynamic val) => ColorTween(begin: val),
+    );
+    _approveTween = visitor(
+      _approveTween,
+      tile.isPolled ? (tile.poll.votesApprove / tile.poll.numPlayers) : 0.0,
+      (dynamic val) => Tween<double>(begin: val),
+    );
+    _rejectTween = visitor(
+      _rejectTween,
+      tile.isPolled ? (tile.poll.votesReject / tile.poll.numPlayers) : 0.0,
+      (dynamic val) => Tween<double>(begin: val),
     );
   }
 
@@ -79,7 +91,10 @@ class _BingoTileViewState extends AnimatedWidgetBaseState<BingoTileView> {
 
   Widget _buildContent() {
     if (tile.state == BingoTileState.polled) {
-      return PollBorder(tile.poll);
+      return PollBorder(
+        approveRatio: _approveTween.evaluate(animation),
+        rejectRatio: _rejectTween.evaluate(animation),
+      );
     } else {
       return Container(width: double.infinity, height: double.infinity);
     }
@@ -87,9 +102,10 @@ class _BingoTileViewState extends AnimatedWidgetBaseState<BingoTileView> {
 }
 
 class PollBorder extends StatefulWidget {
-  final Poll poll;
+  final double approveRatio;
+  final double rejectRatio;
 
-  PollBorder(this.poll);
+  PollBorder({@required this.approveRatio, @required this.rejectRatio});
 
   _PollBorderState createState() => _PollBorderState();
 }
@@ -121,12 +137,12 @@ class _PollBorderState extends State<PollBorder> {
     return CustomPaint(
       foregroundPainter: PartialRRectBorder(
         begin: _offset,
-        end: _offset + widget.poll.votesApprove / widget.poll.numPlayers,
+        end: _offset + widget.approveRatio,
         color: Colors.white,
       ),
       child: CustomPaint(
         foregroundPainter: PartialRRectBorder(
-          begin: _offset - widget.poll.votesReject / widget.poll.numPlayers,
+          begin: _offset - widget.rejectRatio,
           end: _offset,
           color: Colors.black,
         ),
