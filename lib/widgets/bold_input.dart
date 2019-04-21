@@ -1,14 +1,28 @@
 import 'package:flutter/material.dart';
 
-class MyInput extends StatelessWidget {
+class MyInput extends StatefulWidget {
   MyInput({
     @required this.hint,
     @required this.onDone,
+    this.onChanged,
   });
 
   final String hint;
-  final void Function(String text) onDone;
+  final bool Function(String text) onDone;
+  final void Function(String text) onChanged;
+
+  @override
+  _MyInputState createState() => _MyInputState();
+}
+
+class _MyInputState extends State<MyInput> {
   final _controller = TextEditingController();
+
+  void _onDone() {
+    if (widget.onDone(_controller.text)) {
+      _controller.clear();
+    }
+  }
 
   Widget build(BuildContext context) {
     return Container(
@@ -23,17 +37,18 @@ class MyInput extends StatelessWidget {
               child: TextField(
                 controller: _controller,
                 decoration: InputDecoration(
-                  hintText: hint,
+                  hintText: widget.hint,
                   hintStyle: TextStyle(color: Colors.white54),
                   border: InputBorder.none,
                 ),
                 style: TextStyle(color: Colors.white),
-                onSubmitted: onDone,
+                onChanged: widget.onChanged,
+                onSubmitted: (_) => _onDone(),
               ),
             ),
             IconButton(
               icon: Icon(Icons.done, color: Colors.white),
-              onPressed: () => onDone(_controller.text),
+              onPressed: _onDone,
             ),
           ],
         ),

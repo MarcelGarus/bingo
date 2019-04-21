@@ -41,6 +41,11 @@ class Bloc {
     await _field.dispose();
   }
 
+  /// Offers suggestions when creating words.
+  Future<List<String>> getWordSuggestions(Set<String> currentWords) async {
+    return [];
+  }
+
   /// Loads the game.
   Future<BingoGame> _getGame(String id) async {
     var snapshot = await _firestoreGames.document(id).get();

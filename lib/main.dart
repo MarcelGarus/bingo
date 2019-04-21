@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'screens/main_menu.dart';
 import 'bloc/bloc_provider.dart';
+import 'screens/main_menu.dart';
 
 void main() => runApp(BlocProvider(child: MyApp()));
 

@@ -22,54 +22,61 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
       body: Stack(
         children: <Widget>[
           GradientBackground(),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Container(),
-              MyFlatButton(
-                color: Colors.white,
-                label: 'Create new game',
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => CreateGameScreen(),
-                  ));
-                },
+          Positioned.fill(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              alignment: Alignment.center,
+              child: SizedBox(
+                width: 300,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Spacer(),
+                    FlutterLogo(colors: Colors.amber, size: 200),
+                    SizedBox(height: 16),
+                    Text(
+                      'Hörsaalbingo',
+                      style: TextStyle(color: Colors.white, fontSize: 32),
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      'Motiviere dich, bei Vorlesungen zumindest etwas '
+                      'aufzupassen...',
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                    SizedBox(height: 32),
+                    MyFlatButton(
+                      color: Colors.white,
+                      label: 'Create new game',
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => CreateGameScreen(),
+                        ));
+                      },
+                    ),
+                    SizedBox(height: 16),
+                    MyFlatButton(
+                      color: Colors.white,
+                      label: 'Join game',
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => JoinGameScreen(),
+                        ));
+                      },
+                    ),
+                    Spacer(),
+                    Text(
+                      'By creating or joining a game you agree to our privacy '
+                      'policy. For more info tap here.',
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.7),
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              SizedBox(height: 16),
-              MyFlatButton(
-                color: Colors.white,
-                label: 'Join game',
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => JoinGameScreen(),
-                  ));
-                },
-              ),
-              SizedBox(height: 16),
-              MyRaisedButton(
-                label: 'Vote',
-                color: Colors.green,
-                onPressed: _increaseCounter,
-              ),
-              BingoTileView(
-                tile: _count % 3 == 0
-                    ? BingoTile.unmarked('sample tile')
-                    : _count % 3 == 1
-                        ? BingoTile.polled(
-                            'sample tile',
-                            Poll(
-                              word: 'sample tile',
-                              votesApprove: 2,
-                              votesReject: 1,
-                              numPlayers: 4,
-                              deadline:
-                                  DateTime.now().add(Duration(minutes: 1)),
-                            ))
-                        : BingoTile.marked('sample tile'),
-                onPressed: () {},
-              ),
-            ],
+            ),
           ),
         ],
       ),

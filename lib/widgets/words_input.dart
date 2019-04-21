@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'bold_input.dart';
 
-class WordsInput extends StatelessWidget {
+class WordsInput extends StatefulWidget {
   WordsInput({
     @required this.words,
     @required this.onWordsChanged,
@@ -11,6 +11,30 @@ class WordsInput extends StatelessWidget {
 
   final List<String> words;
   final void Function(List<String> words) onWordsChanged;
+
+  @override
+  _WordsInputState createState() => _WordsInputState();
+}
+
+class _WordsInputState extends State<WordsInput> {
+  String error;
+
+  bool _isWordValid(String word) {
+    word = word.trim();
+
+    if (word.isEmpty) {
+      setState(() => error = null);
+      return false;
+    }
+
+    if (widget.words.map((s) => s.toLowerCase()).contains(word.toLowerCase())) {
+      setState(() => error = 'You already entered a similar word.');
+      return false;
+    }
+
+    setState(() => error = null);
+    return true;
+  }
 
   Widget build(BuildContext context) {
     return Column(
@@ -21,27 +45,33 @@ class WordsInput extends StatelessWidget {
           alignment: WrapAlignment.center,
           runAlignment: WrapAlignment.center,
           spacing: 8,
-          children: words.map((word) {
+          children: widget.words.map((word) {
             return Chip(
               label: Text(word),
               backgroundColor: Colors.white,
               onDeleted: () {
-                onWordsChanged(words.where((w) => w != word).toList());
+                widget.onWordsChanged(
+                    widget.words.where((w) => w != word).toList());
               },
             );
           }).toList(),
         ),
-        SizedBox(height: words.isEmpty ? 0 : 16),
+        SizedBox(height: widget.words.isEmpty ? 0 : 16),
         SizedBox(
           width: 300,
           child: MyInput(
             hint: 'Add a word',
+            onChanged: (word) => _isWordValid(word),
             onDone: (word) {
-              if (word.trim().isEmpty) return;
-              onWordsChanged(words.followedBy([word]).toList());
+              if (_isWordValid(word)) {
+                widget.onWordsChanged(widget.words.followedBy([word]).toList());
+                return true;
+              }
+              return false;
             },
           ),
         ),
+        Container(child: error == null ? null : Text(error)),
       ],
     );
   }

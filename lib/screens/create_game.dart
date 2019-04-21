@@ -53,7 +53,9 @@ class _CreateGameScreenState extends State<CreateGameScreen> {
   Widget _buildFab() {
     if (words.length <= size * size) {
       return Text(
-        'Enter at least ${size * size + 1} words.',
+        words.isEmpty
+            ? 'Enter at least ${size * size + 1} words.'
+            : 'Enter ${size * size + 1 - words.length} more words.',
         style: TextStyle(color: Colors.white),
       );
     } else {
