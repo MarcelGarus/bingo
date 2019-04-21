@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../bloc/models.dart';
 import '../widgets/bingo_tile.dart';
-import '../widgets/bold_buttons.dart';
+import '../widgets/buttons.dart';
 import '../widgets/gradient_background.dart';
 import 'create_game.dart';
 import 'join_game.dart';

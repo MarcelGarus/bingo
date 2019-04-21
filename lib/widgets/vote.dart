@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'bold_buttons.dart';
+import 'buttons.dart';
 
 class VoteWidget extends ImplicitlyAnimatedWidget {
   VoteWidget({
@@ -53,8 +53,10 @@ class _VoteWidgetState extends AnimatedWidgetBaseState<VoteWidget> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text('Did this just happen?',
-                        style: TextStyle(fontSize: 16)),
+                    Text(
+                      'Did this just happen?',
+                      style: TextStyle(fontSize: 16),
+                    ),
                     SizedBox(height: 8),
                     Text(widget.word, style: TextStyle(fontSize: 24)),
                     SizedBox(height: 8),
