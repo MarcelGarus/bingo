@@ -4,7 +4,7 @@ Map<String, dynamic> _gameToFirestore(BingoGame game) {
   return {
     'size': game.size,
     'numPlayers': game.numPlayers,
-    'labels': game.labels.toList(),
+    'labels': game.words.toList(),
     'polls': game.polls.map(_voteToFirestore).toList(),
     'marked': game.marked.toList(),
   };
@@ -16,7 +16,7 @@ BingoGame _firestoreToGame(String id, dynamic doc) {
     id: id,
     size: doc['size'] as int,
     numPlayers: numPlayers,
-    labels: Set<String>.from(doc['labels'] as List),
+    words: Set<String>.from(doc['labels'] as List),
     polls: Set<Poll>.from((doc['polls'] as List).map<Poll>((doc) {
       return _firestoreToPoll(doc, numPlayers);
     })),

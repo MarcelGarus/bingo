@@ -11,6 +11,10 @@ export 'models.dart';
 part 'parsers.dart';
 
 class Bloc {
+  final _templates = StreamedProperty<Set<GameTemplate>>();
+  Set<GameTemplate> get templates => _templates.value;
+  ValueObservable<Set<GameTemplate>> get templatesStream => _templates.stream;
+
   final _game = StreamedProperty<BingoGame>();
   BingoGame get game => _game.value;
   ValueObservable<BingoGame> get gameStream => _game.stream;
@@ -33,17 +37,16 @@ class Bloc {
     return holder?.bloc;
   }
 
-  Future<void> dispose() async {
-    if (game != null) {
-      leaveGame();
-    }
-    await _game.dispose();
-    await _field.dispose();
+  Bloc() {
+    () async {
+      _templates.value = await loadTemplates();
+    }();
   }
 
-  /// Offers suggestions when creating words.
-  Future<List<String>> getWordSuggestions(Set<String> currentWords) async {
-    return [];
+  Future<void> dispose() async {
+    if (game != null) leaveGame();
+    await _game.dispose();
+    await _field.dispose();
   }
 
   /// Loads the game.
@@ -56,12 +59,9 @@ class Bloc {
   }
 
   /// Creates a new game.
-  Future<void> createGame({
-    @required int size,
-    @required Set<String> labels,
-  }) async {
+  Future<void> createGame({@required GameTemplate template}) async {
     // Create a new game with the given size and labels.
-    var game = BingoGame.newGame(size: size, numPlayers: 1, labels: labels);
+    var game = BingoGame.newGame(numPlayers: 1, template: template);
 
     // Add the game to Firestore. If that succeeded, add it to the UI stream.
     var doc = await _firestoreGames.add(_gameToFirestore(game));
@@ -77,6 +77,22 @@ class Bloc {
     // Update the game in Firestore. If that succeeded, add it to the UI stream.
     await _firestoreGames.document(id).setData(_gameToFirestore(game));
     _game.value = game;
+
+    // Save the template if it's not there already.
+    var template = GameTemplate(
+      title: game.title,
+      size: game.size,
+      words: game.words,
+      lastUsed: DateTime.now(),
+    );
+    int suffix = 1;
+    var title;
+    if (templates.any((d) {
+      title = suffix == 1 ? template.title : '${template.title} ($suffix)';
+      return d.title == title &&
+          d.words == template.words &&
+          d.size == template.size;
+    })) suffix++;
   }
 
   /// Leaves a game.

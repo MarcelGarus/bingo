@@ -17,6 +17,7 @@ dependencies:
   firebase_analytics: ^2.1.1+2
   qr_flutter: ^2.0.0
   rxdart: ^0.21.0
+  shared_preferences: ^0.5.2
   screen: ^0.0.5
 
 dev_dependencies:

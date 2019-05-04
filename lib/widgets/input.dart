@@ -27,7 +27,7 @@ class _MyInputState extends State<MyInput> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: Colors.white, width: 3)),
+        border: Border(bottom: BorderSide(color: Colors.black, width: 3)),
       ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
@@ -38,16 +38,14 @@ class _MyInputState extends State<MyInput> {
                 controller: _controller,
                 decoration: InputDecoration(
                   hintText: widget.hint,
-                  hintStyle: TextStyle(color: Colors.white54),
                   border: InputBorder.none,
                 ),
-                style: TextStyle(color: Colors.white),
                 onChanged: widget.onChanged,
                 onSubmitted: (_) => _onDone(),
               ),
             ),
             IconButton(
-              icon: Icon(Icons.done, color: Colors.white),
+              icon: Icon(Icons.done),
               onPressed: _onDone,
             ),
           ],

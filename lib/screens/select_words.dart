@@ -36,7 +36,7 @@ class _SelectWordsScreenState extends State<SelectWordsScreen> {
   }
 
   void _update() async {
-    var allWords = Bloc.of(context).game.labels;
+    var allWords = Bloc.of(context).game.words;
     acceptedWords.removeWhere((word) => !allWords.contains(word));
     otherWords
       ..clear()

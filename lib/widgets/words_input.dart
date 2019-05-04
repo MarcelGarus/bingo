@@ -47,8 +47,8 @@ class _WordsInputState extends State<WordsInput> {
           spacing: 8,
           children: widget.words.map((word) {
             return Chip(
-              label: Text(word),
-              backgroundColor: Colors.white,
+              label: Text(word, style: TextStyle(color: Colors.white)),
+              backgroundColor: Colors.black,
               onDeleted: () {
                 widget.onWordsChanged(
                     widget.words.where((w) => w != word).toList());
@@ -57,6 +57,12 @@ class _WordsInputState extends State<WordsInput> {
           }).toList(),
         ),
         SizedBox(height: widget.words.isEmpty ? 0 : 16),
+        FloatingActionButton.extended(
+          backgroundColor: Colors.teal,
+          icon: Icon(Icons.add),
+          label: Text('Add word'),
+          onPressed: () {},
+        ),
         SizedBox(
           width: 300,
           child: MyInput(

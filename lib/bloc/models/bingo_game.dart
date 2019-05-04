@@ -1,36 +1,39 @@
 import 'package:flutter/foundation.dart';
 
+import 'template.dart';
 import 'poll.dart';
 
 @immutable
 class BingoGame {
   final String id;
+  final String title;
   final int size;
   final int numPlayers;
-  final Set<String> labels;
+  final Set<String> words;
   final Set<Poll> polls;
   final Set<String> marked;
 
   /// Rich constructor.
   BingoGame({
     @required this.id,
+    @required this.title,
     @required this.size,
     @required this.numPlayers,
-    @required this.labels,
+    @required this.words,
     @required this.polls,
     @required this.marked,
   });
 
   factory BingoGame.newGame({
-    @required int size,
     @required int numPlayers,
-    @required Set<String> labels,
+    @required GameTemplate template,
   }) {
     return BingoGame(
       id: null,
-      size: size,
+      title: template.title,
+      size: template.size,
       numPlayers: numPlayers,
-      labels: labels,
+      words: template.words,
       polls: <Poll>{},
       marked: <String>{},
     );
@@ -38,18 +41,20 @@ class BingoGame {
 
   BingoGame copyWith({
     String id,
+    String title,
     int size,
     int height,
     int numPlayers,
-    Set<String> labels,
+    Set<String> words,
     Set<Poll> polls,
     Set<String> marked,
   }) {
     return BingoGame(
       id: id ?? this.id,
+      title: title ?? title,
       size: size ?? this.size,
       numPlayers: numPlayers ?? this.numPlayers,
-      labels: labels ?? this.labels,
+      words: words ?? this.words,
       polls: polls ?? this.polls,
       marked: marked ?? this.marked,
     );
@@ -72,7 +77,7 @@ class BingoGame {
   @override
   String toString() {
     return '{id=$id, size=$size, numPlayers=$numPlayers, '
-        'labels=[${labels.join(', ')}], '
+        'words=[${words.join(', ')}], '
         'polls=[${polls.join(', ')}], '
         'marked=[${marked.join(', ')}]}';
   }
