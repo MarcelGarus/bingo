@@ -9,7 +9,7 @@ import '../widgets/gradient_background.dart';
 import '../widgets/share_game_button.dart';
 import 'play_game.dart';
 
-class SelectWordsScreen extends StatefulWidget {
+/*class SelectWordsScreen extends StatefulWidget {
   @override
   _SelectWordsScreenState createState() => _SelectWordsScreenState();
 }
@@ -118,4 +118,4 @@ class _SelectWordsScreenState extends State<SelectWordsScreen> {
 
 String _chooseRandomWord(Iterable<String> words) {
   return List.from(words)[Random().nextInt(words.length)];
-}
+}*/

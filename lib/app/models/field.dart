@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-import 'bingo_tile.dart';
+import 'word.dart';
 
 /// A bingo field. Can be created by providing a bunch of words, like:
 /// ```dart
@@ -14,11 +14,13 @@ import 'bingo_tile.dart';
 /// field = field.withMarked('Something');
 /// ```
 /// Tiles can always be accessed using the [] operator:
+/// ```
 /// var tile = field[3][2] // The tile at position (3, 2).
+/// ```
 @immutable
 class BingoField {
   final int size;
-  final List<BingoTile> tiles;
+  final List<Word> tiles;
 
   /// Creates a bingo field.
   BingoField({
@@ -36,33 +38,40 @@ class BingoField {
   }) {
     return BingoField(
       size: size,
-      tiles: List<BingoTile>.from(words.map((word) => BingoTile.unmarked(word)))
+      tiles: List<Word>.from(words.map((word) => Word.unmarked(word)))
         ..shuffle(),
     );
   }
 
-  /// Returns a copy of this bingo field, but all the tiles are mapped using the
-  /// given function.
-  BingoField withUpdatedTiles(BingoTile Function(BingoTile tile) updateTile) {
+  /// Returns a copy of this bingo field, but all the tiles are mapped using
+  /// the given function.
+  BingoField mapTiles(Word Function(Word word) updateWord) {
     return BingoField(
       size: size,
-      tiles: tiles.map((tile) => updateTile(tile)).toList(growable: false),
+      tiles: tiles.map((word) => updateWord(word)).toList(growable: false),
     );
   }
 
-  /// Returns a BingoColumn (a helper class) that also overloads the []
+  /// Returns a [_BingoColumn] (a helper class) that also overloads the []
   /// operator, allowing for referencing fields at (x,y) using the syntax
   /// `BingoField[x][y]`.
-  operator [](int x) => BingoColumn((y) => tiles[size * y + x]);
+  operator [](int x) => _BingoColumn((y) => tiles[size * y + x]);
 
   @override
   String toString() {
-    return tiles.toString();
+    final buffer = StringBuffer()
+      ..writeAll([
+        for (var y = 0; y < size; y++)
+          [
+            for (var x = 0; x < size; x++) this[x][y].toString(),
+          ].join(' '),
+      ]);
+    return buffer.toString();
   }
 }
 
-class BingoColumn {
-  BingoTile Function(int index) _callback;
-  BingoColumn(this._callback);
+class _BingoColumn {
+  Word Function(int index) _callback;
+  _BingoColumn(this._callback);
   operator [](index) => _callback(index);
 }

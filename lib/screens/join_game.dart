@@ -8,7 +8,7 @@ import '../widgets/buttons.dart';
 import '../widgets/input.dart';
 import '../widgets/gradient_background.dart';
 
-class JoinGameScreen extends StatelessWidget {
+/*class JoinGameScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
@@ -93,4 +93,4 @@ class _GameCodeInputState extends State<_GameCodeInput> {
       _showSnackBar('Unknown error: $e');
     }
   }
-}
+}*/

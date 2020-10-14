@@ -4,10 +4,9 @@ import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
-import '../bloc/models.dart';
 import '../theme.dart';
 
-class BingoTileView extends ImplicitlyAnimatedWidget {
+/*class BingoTileView extends ImplicitlyAnimatedWidget {
   BingoTileView({
     @required this.tile,
     @required this.onPressed,
@@ -337,4 +336,4 @@ class PartialRRectBorder extends CustomPainter {
   bool shouldRepaint(CustomPainter oldDelegate) {
     return true;
   }
-}
+}*/

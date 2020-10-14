@@ -7,7 +7,7 @@ import '../widgets/gradient_background.dart';
 import '../widgets/share_game_button.dart';
 import '../widgets/vote.dart';
 
-class PlayGameScreen extends StatefulWidget {
+/*class PlayGameScreen extends StatefulWidget {
   @override
   _PlayGameScreenState createState() => _PlayGameScreenState();
 }
@@ -84,4 +84,4 @@ class _PlayGameScreenState extends State<PlayGameScreen> {
       ],
     );
   }
-}
+}*/

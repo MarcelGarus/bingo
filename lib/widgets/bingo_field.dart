@@ -1,9 +1,6 @@
-import 'package:flutter/material.dart';
-
-import '../bloc/models.dart';
 import 'bingo_tile.dart';
 
-class BingoFieldView extends StatelessWidget {
+/*class BingoFieldView extends StatelessWidget {
   BingoFieldView({
     @required this.field,
     @required this.onTilePressed,
@@ -38,4 +35,4 @@ class BingoFieldView extends StatelessWidget {
       }),
     );
   }
-}
+}*/

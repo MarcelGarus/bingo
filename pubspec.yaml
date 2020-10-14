@@ -4,7 +4,7 @@ description: A bingo app for lectures and classes.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.2 <3.0.0"
 
 dependencies:
   flutter:
@@ -14,6 +14,7 @@ dependencies:
   barcode_scan: ^1.0.0
   cloud_firestore: ^0.9.13
   cupertino_icons: ^0.1.2
+  data_classes: ^3.0.0
   firebase_analytics: ^2.1.1+2
   qr_flutter: ^2.0.0
   rxdart: ^0.21.0
@@ -23,6 +24,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  data_classes_generator: ^3.0.0
 
 flutter:
   uses-material-design: true
@@ -31,3 +33,9 @@ flutter:
     - family: Signature
       fonts:
         - asset: "assets/NotoSans-Bold.ttf"
+    - family: Futura
+      fonts:
+        - asset: "assets/Futura Book.ttf"
+          weight: 400
+        - asset: "assets/Futura Bold.ttf"
+          weight: 700

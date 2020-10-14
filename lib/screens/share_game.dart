@@ -3,7 +3,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 
 import '../bloc/bloc.dart';
 
-class ShareGameScreen extends StatelessWidget {
+/*class ShareGameScreen extends StatelessWidget {
   ShareGameScreen({@required this.code});
 
   final String code;
@@ -36,4 +36,4 @@ class ShareGameScreen extends StatelessWidget {
       ),
     );
   }
-}
+}*/

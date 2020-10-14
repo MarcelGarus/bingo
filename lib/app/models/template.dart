@@ -18,8 +18,7 @@ class GameTemplate {
     @required this.lastUsed,
   })  : assert(title != null),
         assert(size != null),
-        assert(words != null),
-        assert(words.length > 0);
+        assert(words != null);
 
   factory GameTemplate.fromJson(Map<String, dynamic> data) {
     return GameTemplate(

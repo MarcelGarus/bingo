@@ -1,6 +1,6 @@
 part of 'bloc.dart';
 
-Map<String, dynamic> _gameToFirestore(BingoGame game) {
+/*Map<String, dynamic> _gameToFirestore(Game game) {
   return {
     'size': game.size,
     'numPlayers': game.numPlayers,
@@ -10,9 +10,9 @@ Map<String, dynamic> _gameToFirestore(BingoGame game) {
   };
 }
 
-BingoGame _firestoreToGame(String id, dynamic doc) {
+Game _firestoreToGame(String id, dynamic doc) {
   int numPlayers = doc['numPlayers'];
-  return BingoGame(
+  return Game(
     id: id,
     size: doc['size'] as int,
     numPlayers: numPlayers,
@@ -71,4 +71,4 @@ String qrToCode(String qr) {
   if (_simpleHash(code) != hash) throw invalidError();
 
   return code;
-}
+}*/

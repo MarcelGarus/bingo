@@ -1,30 +1,28 @@
+import 'package:bingo/app/app.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'bloc_provider.dart';
-import 'models.dart';
 import 'streamed_property.dart';
-
-export 'models.dart';
 
 part 'parsers.dart';
 
-class Bloc {
+/*class Bloc {
   final _templates = StreamedProperty<Set<GameTemplate>>();
   Set<GameTemplate> get templates => _templates.value;
   ValueObservable<Set<GameTemplate>> get templatesStream => _templates.stream;
 
-  final _game = StreamedProperty<BingoGame>();
-  BingoGame get game => _game.value;
-  ValueObservable<BingoGame> get gameStream => _game.stream;
+  final _game = StreamedProperty<Game>();
+  Game get game => _game.value;
+  ValueObservable<Game> get gameStream => _game.stream;
 
   final _field = StreamedProperty<BingoField>();
   ValueObservable<BingoField> get fieldStream => _field.stream;
 
   final _votedWords = <String>{};
   Set<String> get wordsToVoteFor =>
-      game.polls.map((v) => v.word).toSet().difference(_votedWords);
+      game.words.map((v) => v.word).toSet().difference(_votedWords);
 
   // Firestore helpers.
   CollectionReference get _firestoreGames =>
@@ -50,7 +48,7 @@ class Bloc {
   }
 
   /// Loads the game.
-  Future<BingoGame> _getGame(String id) async {
+  Future<Game> _getGame(String id) async {
     var snapshot = await _firestoreGames.document(id).get();
     if (!snapshot.exists) {
       throw StateError("Game doesn't exist."); //GameDoesNotExistError();
@@ -61,7 +59,7 @@ class Bloc {
   /// Creates a new game.
   Future<void> createGame({@required GameTemplate template}) async {
     // Create a new game with the given size and labels.
-    var game = BingoGame.newGame(numPlayers: 1, template: template);
+    var game = Game.newGame(numPlayers: 1, template: template);
 
     // Add the game to Firestore. If that succeeded, add it to the UI stream.
     var doc = await _firestoreGames.add(_gameToFirestore(game));
@@ -120,7 +118,7 @@ class Bloc {
     });
   }
 
-  void _onUpdate(BingoGame game) {
+  void _onUpdate(Game game) {
     _field.value = _field.value.withUpdatedTiles((tile) {
       var word = tile.word;
 
@@ -196,4 +194,4 @@ class Bloc {
     _game.value = g;
     _onUpdate(g);
   }
-}
+}*/
