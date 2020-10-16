@@ -4,61 +4,43 @@ import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
-import '../theme.dart';
+enum Selection { notSelected, confirming, selected }
 
-/*class BingoTileView extends ImplicitlyAnimatedWidget {
-  BingoTileView({
-    @required this.tile,
-    @required this.onPressed,
-  })  : assert(tile != null),
-        assert(onPressed != null),
-        super(
-          duration: Duration(milliseconds: 800),
+class TileView extends ImplicitlyAnimatedWidget {
+  const TileView({
+    Key key,
+    @required this.text,
+    this.state = Selection.notSelected,
+    @required this.onTap,
+  }) : super(
+          key: key,
+          duration: const Duration(milliseconds: 200),
           curve: Curves.easeInOut,
         );
 
-  final BingoTile tile;
-  final VoidCallback onPressed;
+  final String text;
+  final Selection state;
+  final VoidCallback onTap;
 
-  _BingoTileViewState createState() => _BingoTileViewState();
+  @override
+  _TileViewState createState() => _TileViewState();
 }
 
-class _BingoTileViewState extends AnimatedWidgetBaseState<BingoTileView> {
-  BingoTile get tile => widget.tile;
-
-  ColorTween _backgroundTween;
+class _TileViewState extends AnimatedWidgetBaseState<TileView> {
   ColorTween _foregroundTween;
-  Tween<double> _approveTween;
-  Tween<double> _rejectTween;
-  Tween<double> _borderOpacityTween;
 
   @override
   void forEachTween(TweenVisitor visitor) {
-    _backgroundTween = visitor(
-      _backgroundTween,
-      tile.isUnmarked ? Colors.white : Colors.black12,
-      (dynamic val) => ColorTween(begin: val),
-    );
     _foregroundTween = visitor(
       _foregroundTween,
-      tile.isUnmarked ? Color(0xFF43a047) : Colors.white,
+      widget.state == Selection.selected ? Colors.white : Colors.black,
       (dynamic val) => ColorTween(begin: val),
     );
-    _approveTween = visitor(
-      _approveTween,
-      tile.isPolled ? (tile.poll.votesApprove / tile.poll.numPlayers) : 0.0,
-      (dynamic val) => Tween<double>(begin: val),
-    );
-    _rejectTween = visitor(
-      _rejectTween,
-      tile.isPolled ? (tile.poll.votesReject / tile.poll.numPlayers) : 0.0,
-      (dynamic val) => Tween<double>(begin: val),
-    );
-    _borderOpacityTween = visitor(
-      _borderOpacityTween,
-      tile.isMarked ? 0.0 : 1.0,
-      (dynamic val) => Tween<double>(begin: val),
-    );
+    // _borderOpacityTween = visitor(
+    //   _borderOpacityTween,
+    //   widget.state == Selection.confirming ? 1.0 : 0.0,
+    //   (dynamic val) => Tween<double>(begin: val),
+    // );
   }
 
   @override
@@ -66,71 +48,50 @@ class _BingoTileViewState extends AnimatedWidgetBaseState<BingoTileView> {
     return Container(
       width: 128,
       height: 128,
-      margin: const EdgeInsets.all(8),
-      child: Transform.scale(
-        scale: !tile.isMarked
-            ? 1.0
-            : 2.0 -
-                max(
-                  Curves.bounceOut.transform(animation.value),
-                  1.0 - Curves.fastOutSlowIn.transform(animation.value),
-                ),
-        child: Stack(
-          children: <Widget>[
-            Positioned.fill(
-              child: Material(
-                color: _backgroundTween.evaluate(animation),
-                borderRadius: BorderRadius.circular(16),
-                child: Center(
-                  child: AutoSizeText(
-                    tile.word,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 36,
-                      color: _foregroundTween.evaluate(animation),
-                    ),
+      child: Stack(
+        children: [
+          Material(
+            animationDuration: Duration(milliseconds: 200),
+            color: widget.state == Selection.selected
+                ? Theme.of(context).accentColor
+                : Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            elevation: widget.state == Selection.selected ? 0 : 5,
+            child: InkWell(
+              onTap: widget.onTap,
+              borderRadius: BorderRadius.circular(16),
+              child: Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.all(8),
+                child: AutoSizeText(
+                  widget.text,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 36,
+                    color: _foregroundTween.evaluate(animation),
+                    fontFamily: 'Signature',
                   ),
                 ),
               ),
             ),
-            Material(
-              type: MaterialType.transparency,
-              child: InkWell(
-                onTap: tile.isUnmarked ? widget.onPressed : null,
-                splashColor: kPrimaryColor.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(16),
-                child:
-                    SizedBox(width: 128, height: 128, child: _buildContent()),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildContent() {
-    return Opacity(
-      opacity: _borderOpacityTween.evaluate(animation),
-      child: PollBorder(
-        approveRatio: _approveTween.evaluate(animation),
-        rejectRatio: _rejectTween.evaluate(animation),
+          ),
+          AnimatedOpacity(
+            duration: Duration(milliseconds: 200),
+            opacity: widget.state == Selection.confirming ? 1.0 : 0.0,
+            child: ConfirmationBorder(),
+          ),
+        ],
       ),
     );
   }
 }
 
-class PollBorder extends StatefulWidget {
-  final double approveRatio;
-  final double rejectRatio;
-
-  PollBorder({@required this.approveRatio, @required this.rejectRatio});
-
-  _PollBorderState createState() => _PollBorderState();
+class ConfirmationBorder extends StatefulWidget {
+  _ConfirmationBorderState createState() => _ConfirmationBorderState();
 }
 
-class _PollBorderState extends State<PollBorder> {
+class _ConfirmationBorderState extends State<ConfirmationBorder> {
   bool _isRunning = true;
   double _offset = 0.0;
 
@@ -147,28 +108,25 @@ class _PollBorderState extends State<PollBorder> {
   void _runAnimation() async {
     while (_isRunning) {
       setState(() {
-        _offset += 0.001;
+        _offset += 0.002;
       });
       await Future.delayed(Duration(milliseconds: 10));
     }
   }
 
   Widget build(BuildContext context) {
-    return CustomPaint(
-      foregroundPainter: PartialRRectBorder(
-        begin: _offset,
-        end: _offset + widget.approveRatio,
-        color: Colors.white,
-      ),
-      child: CustomPaint(
+    Widget child = Container(width: double.infinity, height: double.infinity);
+    for (var i = 0.0; i < 1.0; i += 1 / 9) {
+      child = CustomPaint(
         foregroundPainter: PartialRRectBorder(
-          begin: _offset - widget.rejectRatio,
-          end: _offset,
-          color: Colors.black,
+          begin: _offset + i,
+          end: _offset + i + 0.06,
+          color: Theme.of(context).accentColor,
         ),
-        child: Container(width: double.infinity, height: double.infinity),
-      ),
-    );
+        child: child,
+      );
+    }
+    return child;
   }
 }
 
@@ -336,4 +294,4 @@ class PartialRRectBorder extends CustomPainter {
   bool shouldRepaint(CustomPainter oldDelegate) {
     return true;
   }
-}*/
+}

@@ -1,13 +1,3 @@
-import 'package:barcode_scan/barcode_scan.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
-import '../bloc/bloc.dart';
-import '../screens/select_words.dart';
-import '../widgets/buttons.dart';
-import '../widgets/input.dart';
-import '../widgets/gradient_background.dart';
-
 /*class JoinGameScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(

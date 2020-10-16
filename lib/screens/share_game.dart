@@ -1,8 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-
-import '../bloc/bloc.dart';
-
 /*class ShareGameScreen extends StatelessWidget {
   ShareGameScreen({@required this.code});
 

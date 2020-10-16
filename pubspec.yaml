@@ -4,12 +4,13 @@ description: A bingo app for lectures and classes.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.2.2 <3.0.0"
+  sdk: ">=2.10.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
+  archive: any
   auto_size_text: ^1.1.2
   barcode_scan: ^1.0.0
   cloud_firestore: ^0.9.13
@@ -20,6 +21,9 @@ dependencies:
   rxdart: ^0.21.0
   shared_preferences: ^0.5.2
   screen: ^0.0.5
+  time: any
+  black_hole_flutter: any
+  flutter_deep_linking: any
 
 dev_dependencies:
   flutter_test:
