@@ -3,14 +3,12 @@ import 'dart:io';
 
 import 'models.dart';
 
-final Codec<BoardTemplate, String> gameCodec =
+final Codec<Game, String> gameCodec =
     _GameJsonCodec().fuse(json).fuse(utf8).fuse(gzip).fuse(_UrlSafeBase64());
 
 /// The [base64] codec is great for encoding bytes into strings using all
 /// letters, numbers, + and /. However, in URLs, no slashes are allowed. So,
-/// instead of using + and / as special characters, the [_UrlSafeBase64] uses
-/// - and _.
-/// Note: YouTube uses a similar codec for it's video ids.
+/// the [_UrlSafeBase64] uses _ instead of /.
 class _UrlSafeBase64 extends Codec<List<int>, String> {
   @override
   Converter<List<int>, String> get encoder => _UrlSafeBase64Encoder();
@@ -21,28 +19,26 @@ class _UrlSafeBase64 extends Codec<List<int>, String> {
 
 class _UrlSafeBase64Encoder extends Converter<List<int>, String> {
   @override
-  String convert(List<int> input) =>
-      base64.encode(input).replaceAll('+', '-').replaceAll('/', '_');
+  String convert(List<int> input) => base64.encode(input).replaceAll('/', '_');
 }
 
 class _UrlSafeBase64Decoder extends Converter<String, List<int>> {
   @override
-  List<int> convert(String input) =>
-      base64.decode(input.replaceAll('-', '+').replaceAll('_', '/'));
+  List<int> convert(String input) => base64.decode(input.replaceAll('_', '/'));
 }
 
-/// Converts a [BoardTemplate] to [json].
-class _GameJsonCodec extends Codec<BoardTemplate, Object> {
+/// Converts a [Game] to [json].
+class _GameJsonCodec extends Codec<Game, Object> {
   @override
-  Converter<Object, BoardTemplate> get decoder => _JsonToGameConverter();
+  Converter<Object, Game> get decoder => _JsonToGameConverter();
 
   @override
-  Converter<BoardTemplate, Object> get encoder => _GameToJsonConverter();
+  Converter<Game, Object> get encoder => _GameToJsonConverter();
 }
 
-class _GameToJsonConverter extends Converter<BoardTemplate, Object> {
+class _GameToJsonConverter extends Converter<Game, Object> {
   @override
-  Object convert(BoardTemplate game) {
+  Object convert(Game game) {
     return {
       'version': 0,
       'name': game.name,
@@ -52,14 +48,14 @@ class _GameToJsonConverter extends Converter<BoardTemplate, Object> {
   }
 }
 
-class _JsonToGameConverter extends Converter<Object, BoardTemplate> {
+class _JsonToGameConverter extends Converter<Object, Game> {
   @override
-  BoardTemplate convert(Object data) {
+  Game convert(Object data) {
     final json = data as Map<String, dynamic>;
     if (json['version'] < 0) throw 'invalid version';
     switch (json['version']) {
       case 0:
-        return BoardTemplate(
+        return Game(
           name: json['name'],
           size: json['size'],
           tiles: (json['tiles'] as List).cast<String>(),

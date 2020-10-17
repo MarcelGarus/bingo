@@ -1,8 +1,8 @@
 import 'package:meta/meta.dart';
 
 /// A template for a board. May contain more tiles than fit on a board.
-class BoardTemplate {
-  BoardTemplate({
+class Game {
+  Game({
     @required this.name,
     @required this.tiles,
     @required this.size,
@@ -26,7 +26,7 @@ class Board {
         assert(game.numTilesOnBoard == tiles.length),
         tiles = tiles.map((text) => TileOnBoard(text)).toList()..shuffle();
 
-  final BoardTemplate game;
+  final Game game;
   final List<TileOnBoard> tiles;
   int get size => game.size;
 }

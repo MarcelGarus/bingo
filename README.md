@@ -28,3 +28,31 @@ samples, guidance on mobile development, and a full API reference.
 - /create: redirect to edit of empty game
 - /edit: edit game
 - /settings: settings
+
+# TODO
+
+- [ ] Core
+- [ ] Animations
+- [ ] Website
+- [ ] Deeplinks
+- [ ] Adaptive Layout
+- [ ] Onboarding
+- [ ] Empty States
+- [ ] Error Handling
+- [ ] Privacy Policy
+- [ ] Imprint
+- [ ] PlayStore
+- [ ] Dark Mode
+- [ ] Sound
+- [ ] Vibration
+- [ ] Accessibility
+- [ ] Analytics
+- [ ] ForceTouch/PopOut
+- [ ] Selection
+- [ ] Keybindings
+- [ ] Ctrl+Z
+- [ ] Localization
+- [ ] Tests
+- [ ] Feedback
+- [ ] Donate
+- [ ] Rate App

@@ -71,12 +71,7 @@ class _BoardScreenContentState extends State<BoardScreenContent> {
                 if (widget.isFullscreen)
                   IconButton(
                     icon: Icon(Icons.edit_outlined),
-                    onPressed: () {
-                      return context.navigator.push(MaterialPageRoute(
-                        builder: (_) =>
-                            ShareGameScreen(game: widget.board.game),
-                      ));
-                    },
+                    onPressed: () {},
                   ),
                 IconButton(
                   icon: Icon(widget.isFullscreen
@@ -131,51 +126,6 @@ class _BoardScreenContentState extends State<BoardScreenContent> {
         text: tile.text,
         onTap: () => setState(() => tile.isSelected = !tile.isSelected),
         isSelected: tile.isSelected,
-      ),
-    );
-  }
-}
-
-class ShareGameScreen extends StatelessWidget {
-  ShareGameScreen({@required this.game});
-
-  final BoardTemplate game;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Share the game', style: TextStyle(color: Colors.black)),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        iconTheme: IconThemeData(color: Colors.black),
-      ),
-      backgroundColor: Colors.white,
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(40),
-              child: QrImage(
-                data: gameCodec.encode(game).substring(10),
-                size: 300,
-                version: 10,
-                onError: print,
-              ),
-            ),
-            OutlinedButton(
-              onPressed: () {},
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.copy),
-                  SizedBox(width: 8),
-                  Text('Copy link'),
-                ],
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

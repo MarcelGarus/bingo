@@ -44,6 +44,20 @@ final router = Router(
       materialBuilder: (_, result) {
         // TODO: Handle no id or no valid game.
         final game = gameCodec.decode(result['gameId']);
+        // TODO: Show game preview card.
+
+        if (game.requiresChoosingTiles) {
+          return ChooseTilesPage(game: game);
+        } else {
+          return BoardScreen(board: Board(game: game, tiles: game.tiles));
+        }
+      },
+    ),
+    Route(
+      matcher: Matcher.path('play'),
+      materialBuilder: (_, result) {
+        // TODO: Handle no playable game.
+        final game = result.settings.arguments as Game;
         if (game.requiresChoosingTiles) {
           return ChooseTilesPage(game: game);
         } else {
@@ -53,7 +67,12 @@ final router = Router(
     ),
     Route(
       matcher: Matcher.path('create'),
-      materialBuilder: (_, __) => CreatePage(),
+      materialBuilder: (_, result) {
+        return CreatePage(
+          game: result.settings.arguments as Game ??
+              Game(name: 'New', tiles: [], size: 3),
+        );
+      },
     ),
     // Route(
     //   matcher: Matcher.path('settings'),

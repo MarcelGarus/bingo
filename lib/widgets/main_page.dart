@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 import '../models.dart';
+import 'board_page.dart';
 import 'game_preview_board.dart';
 import 'preview_card.dart';
 import 'tile.dart';
@@ -24,7 +25,7 @@ class _MainPageState extends State<MainPage> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => context.navigator.pushNamed('create'),
         icon: Icon(Icons.add),
-        label: Text('Create'),
+        label: Text('Add game'),
       ),
       body: LayoutBuilder(builder: (context, constraints) {
         final cardHeight = constraints.maxWidth + 21;
@@ -49,9 +50,9 @@ class _MainPageState extends State<MainPage> {
                   FittedBox(
                     child: SizedBox(
                       width: 300,
-                      child: BoardPreview(
+                      child: CurrentBoardPreview(
                         board: Board(
-                          game: BoardTemplate(
+                          game: Game(
                             name: 'Fruits',
                             tiles: [
                               'Banana', 'Kiwi', 'Orange', 'Cherry', 'Papaya',
@@ -74,8 +75,8 @@ class _MainPageState extends State<MainPage> {
                     FittedBox(
                       child: SizedBox(
                         width: 300,
-                        child: BoardTemplatePreview(
-                          game: BoardTemplate(
+                        child: GamePreview(
+                          game: Game(
                             name: 'Fruits',
                             tiles: [
                               'Banana', 'Kiwi', 'Orange', 'Cherry', 'Papaya',
@@ -99,8 +100,8 @@ class _MainPageState extends State<MainPage> {
   }
 }
 
-class BoardPreview extends StatelessWidget {
-  const BoardPreview({Key key, @required this.board}) : super(key: key);
+class CurrentBoardPreview extends StatelessWidget {
+  const CurrentBoardPreview({Key key, @required this.board}) : super(key: key);
 
   final Board board;
 
@@ -108,6 +109,9 @@ class BoardPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     return PreviewCard(
       title: board.game.name,
+      onTap: () => context.navigator.push(MaterialPageRoute(
+        builder: (_) => BoardScreen(board: board),
+      )),
       board: TileGridView(
         size: board.game.size,
         tiles: [
@@ -125,10 +129,10 @@ class BoardPreview extends StatelessWidget {
   }
 }
 
-class BoardTemplatePreview extends StatelessWidget {
-  const BoardTemplatePreview({Key key, @required this.game}) : super(key: key);
+class GamePreview extends StatelessWidget {
+  const GamePreview({Key key, @required this.game}) : super(key: key);
 
-  final BoardTemplate game;
+  final Game game;
 
   @override
   Widget build(BuildContext context) {
@@ -136,6 +140,7 @@ class BoardTemplatePreview extends StatelessWidget {
       title: game.name,
       board: GamePreviewBoard(game: game),
       footer: Center(child: Text('Tap for details')),
+      onTap: () => context.navigator.pushNamed('create', arguments: game),
     );
   }
 }

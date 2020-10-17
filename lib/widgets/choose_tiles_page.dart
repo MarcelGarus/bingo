@@ -8,7 +8,7 @@ import 'tile.dart';
 import '../utils.dart';
 
 class ChooseTilesPage extends StatefulWidget {
-  final BoardTemplate game;
+  final Game game;
 
   const ChooseTilesPage({Key key, @required this.game}) : super(key: key);
 

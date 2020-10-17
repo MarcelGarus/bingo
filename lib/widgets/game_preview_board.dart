@@ -9,7 +9,7 @@ import 'tile.dart';
 class GamePreviewBoard extends StatefulWidget {
   const GamePreviewBoard({Key key, @required this.game}) : super(key: key);
 
-  final BoardTemplate game;
+  final Game game;
 
   @override
   _GamePreviewBoardState createState() => _GamePreviewBoardState();
