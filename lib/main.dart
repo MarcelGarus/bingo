@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart' hide Router, Route;
 import 'package:flutter_deep_linking/flutter_deep_linking.dart';
 
-import 'board_screen.dart';
-import 'choose_tiles_screen.dart';
+import 'widgets/board_page.dart';
+import 'widgets/choose_tiles_page.dart';
 import 'codec.dart';
-import 'main_screen.dart';
+import 'widgets/create_page.dart';
+import 'widgets/main_page.dart';
 import 'models.dart';
 
 void main() => runApp(MyApp());
@@ -44,11 +45,15 @@ final router = Router(
         // TODO: Handle no id or no valid game.
         final game = gameCodec.decode(result['gameId']);
         if (game.requiresChoosingTiles) {
-          return ChooseTilesScreen(game: game);
+          return ChooseTilesPage(game: game);
         } else {
           return BoardScreen(board: Board(game: game, tiles: game.tiles));
         }
       },
+    ),
+    Route(
+      matcher: Matcher.path('create'),
+      materialBuilder: (_, __) => CreatePage(),
     ),
     // Route(
     //   matcher: Matcher.path('settings'),
@@ -57,7 +62,7 @@ final router = Router(
     Route(
       materialBuilder: (_, settings) {
         if (settings.remainingUri.pathSegments.isEmpty) {
-          return MainScreen();
+          return MainPage();
         } else {
           // TODO: 404
           throw 'Bääääh';

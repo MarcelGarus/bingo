@@ -2,18 +2,18 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import 'board_screen.dart';
-import 'models.dart';
+import 'board_page.dart';
+import '../models.dart';
 import 'tile.dart';
-import 'utils.dart';
+import '../utils.dart';
 
-class ChooseTilesScreen extends StatefulWidget {
+class ChooseTilesPage extends StatefulWidget {
   final Game game;
 
-  const ChooseTilesScreen({Key key, @required this.game}) : super(key: key);
+  const ChooseTilesPage({Key key, @required this.game}) : super(key: key);
 
   @override
-  _ChooseTilesScreenState createState() => _ChooseTilesScreenState();
+  _ChooseTilesPageState createState() => _ChooseTilesPageState();
 }
 
 enum ChooseOption { left, right }
@@ -23,7 +23,7 @@ extension on ChooseOption {
       this == ChooseOption.left ? ChooseOption.right : ChooseOption.left;
 }
 
-class _ChooseTilesScreenState extends State<ChooseTilesScreen> {
+class _ChooseTilesPageState extends State<ChooseTilesPage> {
   /// Tiles that can possibly appear in the game. Initially, this includes all
   /// tiles from the game. It's then reduced over time.
   List<String> _tiles;

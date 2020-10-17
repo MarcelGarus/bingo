@@ -11,12 +11,16 @@ dependencies:
     sdk: flutter
 
   archive: any
-  auto_size_text: ^1.1.2
+  auto_size_text: any
+  auto_size_text_field: any
   barcode_scan: ^1.0.0
+  carousel_slider: any
   cloud_firestore: ^0.9.13
   cupertino_icons: ^0.1.2
   data_classes: ^3.0.0
   firebase_analytics: ^2.1.1+2
+  hero_material:
+    path: ../hero_material
   qr_flutter: ^2.0.0
   rxdart: ^0.21.0
   shared_preferences: ^0.5.2

@@ -14,3 +14,17 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter, view our 
 [online documentation](https://flutter.io/docs), which offers tutorials, 
 samples, guidance on mobile development, and a full API reference.
+
+## Goals
+
+- Save current board.
+  - One running game (not multiple simultaneously).
+- Save multiple game templates.
+
+## Routes
+
+- /: main menu
+- /play/{id}: play game (choose words + actual playing)
+- /create: redirect to edit of empty game
+- /edit: edit game
+- /settings: settings
