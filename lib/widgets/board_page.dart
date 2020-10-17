@@ -139,7 +139,7 @@ class _BoardScreenContentState extends State<BoardScreenContent> {
 class ShareGameScreen extends StatelessWidget {
   ShareGameScreen({@required this.game});
 
-  final Game game;
+  final BoardTemplate game;
 
   @override
   Widget build(BuildContext context) {

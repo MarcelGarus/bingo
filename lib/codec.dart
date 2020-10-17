@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'models.dart';
 
-final Codec<Game, String> gameCodec =
+final Codec<BoardTemplate, String> gameCodec =
     _GameJsonCodec().fuse(json).fuse(utf8).fuse(gzip).fuse(_UrlSafeBase64());
 
 /// The [base64] codec is great for encoding bytes into strings using all
@@ -31,35 +31,39 @@ class _UrlSafeBase64Decoder extends Converter<String, List<int>> {
       base64.decode(input.replaceAll('-', '+').replaceAll('_', '/'));
 }
 
-/// Converts a [Game] to [json].
-class _GameJsonCodec extends Codec<Game, Object> {
+/// Converts a [BoardTemplate] to [json].
+class _GameJsonCodec extends Codec<BoardTemplate, Object> {
   @override
-  Converter<Object, Game> get decoder => _JsonToGameConverter();
+  Converter<Object, BoardTemplate> get decoder => _JsonToGameConverter();
 
   @override
-  Converter<Game, Object> get encoder => _GameToJsonConverter();
+  Converter<BoardTemplate, Object> get encoder => _GameToJsonConverter();
 }
 
-class _GameToJsonConverter extends Converter<Game, Object> {
+class _GameToJsonConverter extends Converter<BoardTemplate, Object> {
   @override
-  Object convert(Game game) {
+  Object convert(BoardTemplate game) {
     return {
       'version': 0,
+      'name': game.name,
       'size': game.size,
       'tiles': game.tiles,
     };
   }
 }
 
-class _JsonToGameConverter extends Converter<Object, Game> {
+class _JsonToGameConverter extends Converter<Object, BoardTemplate> {
   @override
-  Game convert(Object data) {
+  BoardTemplate convert(Object data) {
     final json = data as Map<String, dynamic>;
     if (json['version'] < 0) throw 'invalid version';
     switch (json['version']) {
       case 0:
-        return Game(
-            size: json['size'], tiles: (json['tiles'] as List).cast<String>());
+        return BoardTemplate(
+          name: json['name'],
+          size: json['size'],
+          tiles: (json['tiles'] as List).cast<String>(),
+        );
       default:
         throw 'unknown encoding';
     }

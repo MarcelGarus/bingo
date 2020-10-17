@@ -1,13 +1,8 @@
 import 'dart:math';
 
-import 'package:auto_size_text_field/auto_size_text_field.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:hero_material/hero_material.dart';
 
-import 'board_page.dart';
-import 'choose_tiles_page.dart';
-import '../codec.dart';
 import '../models.dart';
 import 'game_preview_board.dart';
 import 'preview_card.dart';
@@ -56,7 +51,8 @@ class _MainPageState extends State<MainPage> {
                       width: 300,
                       child: BoardPreview(
                         board: Board(
-                          game: Game(
+                          game: BoardTemplate(
+                            name: 'Fruits',
                             tiles: [
                               'Banana', 'Kiwi', 'Orange', 'Cherry', 'Papaya',
                               'Pomegranade', //
@@ -78,8 +74,9 @@ class _MainPageState extends State<MainPage> {
                     FittedBox(
                       child: SizedBox(
                         width: 300,
-                        child: GamePreview(
-                          game: Game(
+                        child: BoardTemplatePreview(
+                          game: BoardTemplate(
+                            name: 'Fruits',
                             tiles: [
                               'Banana', 'Kiwi', 'Orange', 'Cherry', 'Papaya',
                               'Pomegranade', //
@@ -110,7 +107,7 @@ class BoardPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PreviewCard(
-      title: 'Fruits',
+      title: board.game.name,
       board: TileGridView(
         size: board.game.size,
         tiles: [
@@ -128,15 +125,15 @@ class BoardPreview extends StatelessWidget {
   }
 }
 
-class GamePreview extends StatelessWidget {
-  const GamePreview({Key key, @required this.game}) : super(key: key);
+class BoardTemplatePreview extends StatelessWidget {
+  const BoardTemplatePreview({Key key, @required this.game}) : super(key: key);
 
-  final Game game;
+  final BoardTemplate game;
 
   @override
   Widget build(BuildContext context) {
     return PreviewCard(
-      title: 'Fruit bingo',
+      title: game.name,
       board: GamePreviewBoard(game: game),
       footer: Center(child: Text('Tap for details')),
     );
