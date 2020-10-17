@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
-import 'utils.dart';
+import '../utils.dart';
 
 class TileView extends ImplicitlyAnimatedWidget {
   TileView({
@@ -72,8 +72,8 @@ class _TileViewState extends AnimatedWidgetBaseState<TileView> {
   }
 }
 
-class BoardView extends StatelessWidget {
-  const BoardView({
+class TileGridView extends StatelessWidget {
+  const TileGridView({
     Key key,
     @required this.size,
     @required this.tiles,
